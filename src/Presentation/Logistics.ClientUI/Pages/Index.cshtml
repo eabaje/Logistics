@@ -1,0 +1,273 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<section class="banner">
+    <div class="container">
+        <div class="banner_text_wthree_pvt">
+
+            <h3 class="home-banner-w3">Smart Dispatch Systems </h3>
+            <p class="bnr-txt">
+                Our systems will help our customers manage the process of goods disptach in the local arena.
+            </p>
+            <form action="@Url.Action("TrackSearch", "Track")" method="post" class="d-flex serching-styles-w3pvt">
+                <input type="text" class="serach-input" placeholder="Enter Your Track Id" name="search" required>
+                <button class="btn bg-theme button-w3" type="submit">Track Now</button>
+            </form>
+        </div>
+    </div>
+    <!-- banner text -->
+    <!-- //banner text -->
+    <!-- banner-bottom -->
+    @*<div class="banner-bottom-w3ls wow fadeIn">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 col-6">
+                        <div class="bb-img">
+                            <img src="@Url.Content("~/images/a2.jpg")" class="img-fluid img-thumbnail" alt="" />
+                            <h3>Shipper</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-6">
+                        <div class="bb-img">
+                            <img src="@Url.Content("~/images/a1.jpg")" class="img-fluid img-thumbnail" alt="" />
+                            <h3>Carrier</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-6 mx-auto mt-sm-0 mt-4">
+                        <div class="bb-img">
+                            <img src="@Url.Content("~/images/a3.jpg")" class="img-fluid img-thumbnail" alt="" />
+                            <h3>Broker</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <!-- //banner-bottom -->
+</section>
+<!-- //banner -->
+<!---728x90--->
+<!-- about-->
+<section class="single_grid_w3_main align-w3-abt" id="about">
+    <div class="container">
+
+        <div class="row bb-img">
+            <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="abt-grid">
+                    <div class="row">
+                        <div class="bb-img">
+                            <img src="@Url.Content("~/images/a2.jpg")" class="img-fluid img-thumbnail" alt="" />
+                            <h3>Shipper</h3>
+                        </div>
+                        <div class="col-3 ">
+
+                            <div class="abt-icon">
+                                <span class="fa fa-subway"></span>
+                            </div>
+                        </div>
+                        <div class="col-9 ">
+                            <div class="abt-txt">
+                                @*<h4>Shipper</h4>*@
+                                <p>Jump the line and get direct access to truck loaders for your consignment deliveries..</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 my-lg-0 my-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="abt-grid">
+                    <div class="row">
+                        <div class="bb-img">
+                            <img src="@Url.Content("~/images/a1.jpg")" class="img-fluid img-thumbnail" alt="" />
+                            <h3>Carrier</h3>
+                        </div>
+                        <div class="col-3">
+                            <div class="abt-icon">
+                                <span class="fa fa-ship"></span>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="abt-txt">
+                                @*<h4>Broker</h4>*@
+                                <p>Become that broker with access to our large datatbase of carriers for your clients needs..</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="abt-grid">
+                    <div class="row">
+                        <div class="bb-img">
+                            <img src="@Url.Content("~/images/a3.jpg")" class="img-fluid img-thumbnail" alt="" />
+                            <h3>Broker</h3>
+                        </div>
+                        <div class="col-3">
+                            <div class="abt-icon">
+                                <span class="fa fa-plane"></span>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="abt-txt">
+                                @*<h4>Carrier</h4>*@
+                                <p>Get connccetd to all load request just a click away.Browse our large repository of client..</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a asp-page="/Account/Register"  class="btn w3ls-btn">Create An Account</a>
+        </div>
+    </div>
+</section>
+<!-- //about -->
+<!---728x90--->
+<!---728x90--->
+<!-- slide -->
+<section class="wthree-slide-btm py-lg-5" id="more">
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-lg-6 bb-img">
+                <div class="slide-banner pl-0 ">
+                </div>
+            </div>
+            <div class="col-lg-6 mt-lg-0 mt-4">
+                <div class="container">
+                    <div class="wthree_pvt_title bb-img">
+                        <h4 class="w3pvt-title">
+                            Best for Truck Loads Management
+                        </h4>
+                        <span class="sub-title">We ensure you get the best Load Board Services</span>
+                    </div>
+                    <div class="row flex-column bb-img">
+                        <div class="abt-grid">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="abt-icon">
+                                        <span class="fa fa-fighter-jet"></span>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="abt-txt ml-0">
+                                        <h4>Best delivery Services </h4>
+                                        <p>Seamless delievery experience with our vetted providers.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="abt-grid mt-4 pt-lg-2">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="abt-icon">
+                                        <span class="fa fa-truck"></span>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="abt-txt ml-0">
+                                        <h4>Tracking Systems</h4>
+                                        <p>Realtime tracking of goods with our tracking networks.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <a href="about.html" class="btn w3ls-btn">view more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //slide -->
+<!-- blog -->
+<section class="blog_w3ls align-w3" id="blog">
+    <div class="container">
+        <div class="wthree_pvt_title text-center">
+            <h4 class="w3pvt-title">
+                Other Services Offered
+            </h4>
+            @*<p class="sub-title">
+                    Subheadings stand out because they are like mini titles. They make your post stand
+                    out and
+                    make it more readable.
+                </p>*@
+        </div>
+        <div class="row space-sec">
+            <!-- blog grid -->
+            <div class="col-lg-4 col-md-6 mt-sm-0 mt-4">
+                <div class="card bb-img ">
+                    <div class="card-header p-0 position-relative ">
+                        <a href="single.html">
+                            <img class="card-img-bottom" src="@Url.Content("~/images/g1.jpg")" alt="">
+
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="blog-title card-title font-weight-bold">
+                            <a href="single.html">Fleet Management</a>
+                        </h5>
+                        <p>
+                            We help lift the burden of  truck owners and investors
+                            managing personnel,vehicles and energy requirements.
+                        </p>
+
+                    </div>
+                </div>
+                <a href="@Url.Action("Index", "Fleet")" class="blog_link">Read more</a>
+            </div>
+            <!-- //blog grid -->
+            <!-- blog grid -->
+            <div class="col-lg-4 col-md-6 mt-md-0  mt-4">
+                <div class="card bb-img">
+                    <div class="card-header p-0 position-relative">
+                        <a href="single.html">
+                            <img class="card-img-bottom" src="@Url.Content("~/images/g2.jpg")" alt="Card image cap">
+                            @*<span class="post-icon">Load Board Services</span>*@
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="blog-title card-title font-weight-bold">
+                            <a href="@Url.Action("Service", "Load")">Load Board Services</a>
+                        </h5>
+                        <p>
+                            We give an online marketplace where truck owner-operators, shippers, and
+                            freight brokers can post and search for loads to keep freight
+                        </p>
+
+                    </div>
+                </div>
+                <a href="@Url.Action("Index", "Load")" class="blog_link">Read more</a>
+            </div>
+            <!-- //blog grid -->
+            <!-- blog grid -->
+            <div class="col-lg-4 col-md-6 mt-lg-0 mt-4 mx-auto blog-end">
+                <div class="card bb-img">
+                    <div class="card-header p-0  position-relative bb-img">
+                        <a href="single.html">
+                            <img class="card-img-bottom" src="@Url.Content("~/images/g3.jpg")" alt="Card image cap">
+                            @*<span class="post-icon">Freight Forwarding</span>*@
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="blog-title card-title font-weight-bold">
+                            <a href="@Url.Action("Index", "Freight")">Freight Forwarding</a>
+                        </h5>
+                        <p>
+                            we help  organize shipments for individuals or corporations to get goods from the manufacturer or producer to a market.
+                        </p>
+
+                    </div>
+                </div>
+                <a href="@Url.Action("Index", "Freight")" class="blog_link">Read more</a>
+            </div>
+            <!-- //blog grid -->
+        </div>
+    </div>
+</section>
+<!-- //blog -->
