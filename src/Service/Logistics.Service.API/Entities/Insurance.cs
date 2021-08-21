@@ -16,8 +16,11 @@ namespace Logistics.Service.API.Entities
         public string InsuranceName { get; set; }
         public string InsuranceType { get; set; }
         public string Insurer { get; set; }
-       
 
+        public int CompanyId { get; set; }
+
+
+        public Company Company { get; set; }
         // public ICollection<Product> Products { get; private set; }
     }
 }

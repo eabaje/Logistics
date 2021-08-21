@@ -2,8 +2,10 @@
 using Logistics.Service.API.Data;
 using Logistics.Service.API.Entities;
 using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,14 +27,28 @@ namespace Logistics.Service.API.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Task<bool> AddItemAsync(Insurance item)
+        public async Task<bool> AddItemAsync(Insurance item)
         {
-            throw new NotImplementedException();
+            _context
+                           .Insurances
+                           .Add(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            throw new NotImplementedException();
+            var entity = _context
+                           .Insurances
+                           .FirstOrDefault(t => t.InsuranceId == Guid.Parse(id));
+
+            _context.Insurances.Remove(entity);
+
+
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public Task<IEnumerable<Insurance>> GetInsuranceByCarrier(string id)
@@ -40,29 +56,62 @@ namespace Logistics.Service.API.Repository
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Insurance>> GetInsuranceByDate(string InsureDate)
+        public async Task<IEnumerable<Insurance>> GetInsuranceByDate(DateTime fromDate, DateTime ToDate, string companyId)
         {
-            throw new NotImplementedException();
+            List<Insurance> InsuranceList = new List<Insurance>();
+
+            return InsuranceList = (string.IsNullOrEmpty(companyId)) ? await _context
+                       .Insurances
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Insurances
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p. == companyId)
+                       .ToListAsync();
         }
 
-        public Task<Insurance> GetItemAsync(string id)
+        public async Task<Insurance> GetItemAsync(string id)
         {
-            throw new NotImplementedException();
+            var Insurance = new Insurance();
+
+            return Insurance =
+                             await _context
+                            .Insurances
+                            .Where(p => p.InsuranceId == int.Parse(id))
+                            .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Insurance>> GetItemsAsync()
+        public async Task<IEnumerable<Insurance>> GetItemsAsync()
         {
-            throw new NotImplementedException();
+            List<Insurance> InsuranceList = new List<Insurance>();
+
+            return InsuranceList =
+                             await _context
+                            .Insurances
+                            .ToListAsync();
         }
 
-        public Task<IEnumerable<Insurance>> GetItemsByCritriaAsync(Func<Insurance, bool> query)
+        public async Task<IEnumerable<Insurance>> GetItemsByCritriaAsync(Func<Insurance, bool> query)
         {
-            throw new NotImplementedException();
+            List<Insurance> InsuranceList = new List<Insurance>();
+
+            InsuranceList =
+                            await _context
+                           .Insurances
+                           .ToListAsync();
+
+
+            return InsuranceList.Where(query);
         }
 
         public Task<bool> UpdateItemAsync(Insurance item)
         {
-            throw new NotImplementedException();
+            _context
+                         .Insurances
+                         .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

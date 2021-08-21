@@ -14,14 +14,17 @@ namespace Logistics.Service.API.Entities
         [Key]
         public Guid CarrierId { get; set; }
         public override Guid EntityId => CarrierId;
-      
+
+        public int CompanyId { get; set; }
         public CarrierType CarrierType { get; set; }
         public FleetType FleetType { get; set; }
         public int FleetNumber { get; set; }
         public bool? Licensed { get; set; }
 
       ///  [ForeignKey(CompanyId)]
-        public int CompanyId { get; set; }
+      
+
+          [ForeignKey(CompanyId)]
         public Company Company { get; set; }
     }
 }
