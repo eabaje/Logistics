@@ -21,10 +21,11 @@ namespace Logistics.Service.API.Entities
         public int FleetNumber { get; set; }
         public bool? Licensed { get; set; }
 
-      ///  [ForeignKey(CompanyId)]
-      
+        ///  [ForeignKey(CompanyId)]
 
-          [ForeignKey(CompanyId)]
+        public int? Rating { get; set; }
+
+        [ForeignKey("CompanyId")]
         public Company Company { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Logistics.Shared.Models
         public string Email { get; set; }
 
 
-        public Company Company { get; set; }
+     //   public Company Company { get; set; }
 
         [DisplayName("Category")]
         public string Category { get; set; }
@@ -47,7 +47,7 @@ namespace Logistics.Shared.Models
         [DisplayName("Date of Registration")]
         public DateTime? RegisterDate { get; set; }
 
-        public IEnumerable<Company> CompanyList { get; set; }
+   //     public IEnumerable<Company> CompanyList { get; set; }
 
         [DisplayName("FullName")]
         public string FullName

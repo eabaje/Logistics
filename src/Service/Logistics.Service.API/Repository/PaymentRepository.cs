@@ -1,126 +1,105 @@
 ﻿
 
+using Logistics.Service.API.Data;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carrier.Domain.Entities;
-using Carrier.FirebaseServer.Interface;
-using Carrier.FirebaseServer.Repository;
-using Firebase.Database;
-using Firebase.Database.Query;
+
 namespace Logistics.Service.API.Repository
 {
-    public class PaymentRepository: FirebaseDataStore<Payment>,IPaymentService
+    public class PaymentRepository: IPaymentRepository
     {
 
-        private IFireBaseAuthService _authservice;
-        private readonly IPaymentService _PaymentRepository;
+        private readonly LogisticsDbContext _context;
 
-                     
-        public PaymentRepository(IFireBaseAuthService authService) : base(authService, "Payment")
+        public PaymentRepository(LogisticsDbContext context)
         {
-          
+
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        
-        public async Task<IEnumerable<Payment>> GetAllPayment()
+        public async Task<bool> AddItemAsync(Payment item)
         {
-            try
-            {
+            _context
+                            .Payments
+                            .Add(item);
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddPayment(Payment Payment)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Payment);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdatePayment(Payment Payment)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Payment.PaymentId.ToString(), Payment);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Payment> GetPaymentById(string id)
-        {
-            try
-            {
-
-                var entity = await GetItemAsync(id);
-
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-
-
-        public async Task<IEnumerable<Payment>> GetPaymentByCarrier(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            var entity = _context
+                            .Payments
+                            .FirstOrDefault(t => t.PaymentId == Guid.Parse(id));
+
+            _context.Payments.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<Payment>> GetPaymentHistory(string id)
+        public async Task<Payment> GetItemAsync(string id)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> DeletePayment(string id)
-        {
-            try
-            {
-                bool done = await DeleteItemAsync(id);
+            var Payment = new Payment();
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+            return Payment =
+                             await _context
+                            .Payments
+                            .Where(p => p.PaymentId == Guid.Parse(id))
+                            .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Payment>> GetItemsAsync()
+        {
+            List<Payment> PaymentList = new List<Payment>();
+
+            return PaymentList =
+                             await _context
+                            .Payments
+                            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Payment>> GetItemsByCritriaAsync(Func<Payment, bool> query)
+        {
+            List<Payment> PaymentList = new List<Payment>();
+
+            PaymentList =
+                            await _context
+                           .Payments
+                           .ToListAsync();
+
+
+            return PaymentList.Where(query);
+        }
+
+        public async Task<IEnumerable<Payment>> GetPaymentHistory(DateTime fromDate, DateTime ToDate, string paymentRef)
+        {
+            List<Payment> PaymentList = new List<Payment>();
+
+            return PaymentList = (string.IsNullOrEmpty(paymentRef)) ? await _context
+                       .Payments
+                       .Where(p => p.PaymentDate >= fromDate && p.PaymentDate <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Payments
+                       .Where(p => p.PaymentDate >= fromDate && p.PaymentDate <= ToDate && p.ReferenceId == paymentRef)
+                       .ToListAsync();
+        }
+
+        public async Task<bool> UpdateItemAsync(Payment item)
+        {
+            _context
+                        .Payments
+                        .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

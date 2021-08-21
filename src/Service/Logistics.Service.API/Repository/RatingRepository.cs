@@ -1,123 +1,100 @@
 ﻿
+using Logistics.Service.API.Data;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carrier.Domain.Entities;
-using Carrier.FirebaseServer.Interface;
-using Carrier.FirebaseServer.Repository;
-using Firebase.Database;
-using Firebase.Database.Query;
+
 namespace Logistics.Service.API.Repository
 {
-    public class RatingRepository: FirebaseDataStore<Rating>, IRatingService
+    public class RatingRepository: IRatingRepository
     {
 
-        private IFireBaseAuthService _authservice;
-        private readonly IRatingService _RatingRepository;
+        private readonly LogisticsDbContext _context;
 
-
-        public RatingRepository( IFireBaseAuthService authService) : base(authService, "Ratings")
+        public RatingRepository(LogisticsDbContext context)
         {
-           
-           
-        }
-        public async Task<IEnumerable<Rating>> GetAllRatings()
-        {
-            try
-            {
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddRating(Rating Rating)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Rating);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateRating(Rating Rating)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Rating.RatingId.ToString(), Rating);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Rating> GetRatingById(string id)
-        {
-            try
-            {
-
-                var entity = await GetItemAsync(id);
-
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-
-
-        public async Task<IEnumerable<Rating>> GetRatingByCarrier(string id)
+        public async Task<bool> AddItemAsync(Rating item)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            _context
+                            .Ratings
+                            .Add(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<IEnumerable<Rating>> GetRatingByCompany(string id)
-        {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> DeleteRating(string id)
-        {
-            try
-            {
-                bool done = await DeleteItemAsync(id);
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+        public async Task<bool> DeleteItemAsync(string id)
+        {
+            var entity = _context
+                            .Ratings
+                            .FirstOrDefault(t => t.RatingId == Guid.Parse(id));
+
+            _context.Ratings.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Rating> GetItemAsync(string id)
+        {
+            var Rating = new Rating();
+
+            return Rating =
+                             await _context
+                            .Ratings
+                            .Where(p => p.RatingId == Guid.Parse(id))
+                            .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Rating>> GetItemsAsync()
+        {
+            List<Rating> RatingList = new List<Rating>();
+
+            return RatingList =
+                             await _context
+                            .Ratings
+                            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Rating>> GetItemsByCritriaAsync(Func<Rating, bool> query)
+        {
+            List<Rating> RatingList = new List<Rating>();
+
+            RatingList =
+                            await _context
+                           .Ratings
+                           .ToListAsync();
+
+
+            return RatingList.Where(query);
+        }
+
+        public Task<IEnumerable<Rating>> GetRatingByCompany(string CompanyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Rating>> GetRatingHistory(DateTime fromDate, DateTime ToDate, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> UpdateItemAsync(Rating item)
+        {
+            _context
+                        .Ratings
+                        .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

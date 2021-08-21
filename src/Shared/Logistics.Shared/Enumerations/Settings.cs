@@ -32,6 +32,14 @@ namespace Logistics.Shared.Enumerations
         Item
         
     }
+
+    public enum ShipperType
+    {
+        individual,
+        Company,
+       
+
+    }
     public enum CarrierType
     {
         Air,
@@ -54,6 +62,17 @@ namespace Logistics.Shared.Enumerations
         FishingBoat,
         Tanker
 
+
+    }
+
+    public enum CargoType
+    {   RoRo,
+        Container,
+        LiquidBulk,
+        BreakBulk,
+        DryBulk,
+        
+       
 
     }
     public enum LoadCapacity
@@ -99,5 +118,14 @@ namespace Logistics.Shared.Enumerations
         OrderMade = 1,
         Proceesed = 2,
         Delivered = 3
+    }
+
+    public enum Ratings
+    {
+        Bad = 1,
+        Good = 2,
+        VeryGood = 3,
+        Excellent = 4,
+
     }
 }

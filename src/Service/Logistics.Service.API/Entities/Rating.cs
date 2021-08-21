@@ -11,7 +11,8 @@ namespace Logistics.Service.API.Entities
         public Guid RatingId { get; set; }
         public int Score { get; set; }
         public string Recipient { get; set; }
-     
+
+        public string UserId { get; set; }
 
     }
 }

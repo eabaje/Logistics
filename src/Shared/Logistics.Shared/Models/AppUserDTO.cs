@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.AspNetCore.Identity;
+
 // [JsonProperty.Json;
 
 namespace Logistics.Shared.Models
 {
-   public  class AppUserDTO : IdentityUser
+   public  class AppUserDTO
     {
 
         // [JsonProperty("lastName")]
@@ -26,7 +26,7 @@ namespace Logistics.Shared.Models
         public bool? IsActive { get; set; }
         public bool? ForceChangeOfPassword { get; set; }
         public DateTime? LastDatePasswordWasChanged { get; set; }
-        public AppRole Role { get; set; }
+      //  public AppRole Role { get; set; }
 
     }
 }

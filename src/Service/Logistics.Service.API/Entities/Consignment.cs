@@ -15,7 +15,7 @@ namespace Logistics.Service.API.Entities
         public string LoadType { get; set; }
         public Decimal? LoadWeight { get; set; }
         public LoadUnit LoadUnit { get; set; }
-        public string Comment { get; set; }
+        public string Description { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
     }

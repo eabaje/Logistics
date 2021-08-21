@@ -12,8 +12,8 @@ namespace Logistics.Service.API.Entities
     public  class Journey:BaseEntity
     {
         [Key]
-        public int Id { get; set; }
-        public override int EntityId => Id;
+        public int JourneyId { get; set; }
+        public override int EntityId => JourneyId;
         public int DriverId { get; set; }    
         public int VehicleId{ get; set; }
         public string JourneyStatus { get; set; }

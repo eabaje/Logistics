@@ -1,4 +1,4 @@
-﻿using Logistics.Domain.Entities;
+﻿
 using System.Threading.Tasks;
 
 namespace Logistics.Infrastructure.Managers.Abstract
@@ -7,6 +7,6 @@ namespace Logistics.Infrastructure.Managers.Abstract
     {
         Task<string> ReadTemplateAsync(string templateName);
 
-          Task<string> PrepareForgottenPasswordEmailAsync(AppUser user);
+        //  Task<string> PrepareForgottenPasswordEmailAsync(AppUser user);
     }
 }

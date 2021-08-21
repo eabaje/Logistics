@@ -12,7 +12,7 @@ namespace Logistics.Service.API.Repository.Interfaces
     {
 
         Task<IEnumerable<Rating>> GetRatingByCompany(string CompanyId);
-
+        Task<IEnumerable<Rating>> GetRatingHistory(DateTime fromDate, DateTime ToDate, string userId);
 
     }
 }

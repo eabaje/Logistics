@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace Logistics.Shared.Models
 { 
-    [FirestoreData]
+    //[FirestoreData]
    public class ConsignmentDTO
     {
         // [JsonProperty(PropertyName = "LoadId")]

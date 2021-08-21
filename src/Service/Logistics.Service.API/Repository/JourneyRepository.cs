@@ -1,125 +1,104 @@
 ﻿
+using Logistics.Service.API.Data;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carrier.Domain.Entities;
-using Carrier.FirebaseServer.Interface;
-using Carrier.FirebaseServer.Repository;
-using Firebase.Database;
-using Firebase.Database.Query;
+
 namespace Logistics.Service.API.Repository
 {
-    public class JourneyRepository: FirebaseDataStore<Journey>,IJourneyService
+    public class JourneyRepository: IJourneyRepository
     {
 
-        private IFireBaseAuthService _authservice;
-        private readonly IJourneyService _JourneyRepository;
+        private readonly LogisticsDbContext _context;
 
-        public JourneyRepository(IFireBaseAuthService authService) : base(authService, "Journeys")
+        public JourneyRepository(LogisticsDbContext context)
         {
-         
+
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-     
-     
-        public async Task<IEnumerable<Journey>> GetAllJourneys()
+        public   async Task<bool> AddItemAsync(Journey item)
         {
-            try
-            {
+            _context
+                             .Journeys
+                             .Add(item);
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddJourney(Journey Journey)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Journey);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateJourney(Journey Journey)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Journey.Id.ToString(), Journey);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Journey> GetJourneyById(string id)
-        {
-            try
-            {
-
-                var entity = await GetItemAsync(id);
-
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-
-
-        public async Task<IEnumerable<Journey>> GetJourneyByCarrier(string id)
+        public   async Task<bool> DeleteItemAsync(string id)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            var entity = _context
+                           .Journeys
+                           .FirstOrDefault(t => t.JourneyId == int.Parse(id));
+
+            _context.Journeys.Remove(entity);
+
+            return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<IEnumerable<Journey>> GetJourneyHistory(string id)
-        {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        
-        public async Task<bool> DeleteJourney(string id)
-        {
-            try
-            {
-                bool done = await DeleteItemAsync(id);
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+        public   async Task<Journey> GetItemAsync(string id)
+        {
+            var Journey = new Journey();
+
+            return Journey =
+                             await _context
+                            .Journeys
+                            .Where(p => p.JourneyId == int.Parse(id))
+                            .FirstOrDefaultAsync();
+        }
+
+        public   async Task<IEnumerable<Journey>> GetItemsAsync()
+        {
+            List<Journey> JourneyList = new List<Journey>();
+
+            return JourneyList =
+                             await _context
+                            .Journeys
+                            .ToListAsync();
+        }
+
+        public   async Task<IEnumerable<Journey>> GetItemsByCritriaAsync(Func<Journey, bool> query)
+        {
+            List<Journey> JourneyList = new List<Journey>();
+
+            JourneyList =
+                            await _context
+                           .Journeys
+                           .ToListAsync();
+
+
+            return JourneyList.Where(query);
+        }
+
+        public   async Task<IEnumerable<Journey>> GetJourneyHistory(DateTime fromDate, DateTime ToDate, string vehicleId)
+        {
+            List<Journey> JourneyList = new List<Journey>();
+
+            return JourneyList = (string.IsNullOrEmpty(vehicleId)) ? await _context
+                       .Journeys
+                       .Where(p => p.StartDate >= fromDate && p.ArrivalDate <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Journeys
+                       .Where(p => p.StartDate >= fromDate && p.ArrivalDate <= ToDate && p.VehicleId == int.Parse(vehicleId))
+                       .ToListAsync();
+        }
+
+        public   async Task<bool> UpdateItemAsync(Journey item)
+        {
+            _context
+                        .Journeys
+                        .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Logistics.Service.API.Repository
         {
             var entity = _context
                            .Insurances
-                           .FirstOrDefault(t => t.InsuranceId == Guid.Parse(id));
+                           .FirstOrDefault(t => t.InsuranceId == int.Parse(id));
 
             _context.Insurances.Remove(entity);
 
@@ -66,7 +66,7 @@ namespace Logistics.Service.API.Repository
                        .ToListAsync()
                        : await _context
                        .Insurances
-                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p. == companyId)
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p.CompanyId == int.Parse(companyId))
                        .ToListAsync();
         }
 
@@ -104,7 +104,7 @@ namespace Logistics.Service.API.Repository
             return InsuranceList.Where(query);
         }
 
-        public Task<bool> UpdateItemAsync(Insurance item)
+        public async Task<bool> UpdateItemAsync(Insurance item)
         {
             _context
                          .Insurances

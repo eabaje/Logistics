@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Logistics.Domain.Exceptions;
+
 using Logistics.Infrastructure.Managers.Abstract;
 using Microsoft.AspNetCore.Http;
 
@@ -26,7 +26,7 @@ namespace Logistics.Infrastructure.Managers.Implementations
                 }
                 catch (Exception e)
                 {
-                    throw new LogisticsException(ErrorCode.UnableToSavePhoto, e.Message, e);
+                  //  throw new LogisticsException(ErrorCode.UnableToSavePhoto, e.Message, e);
                 }
             }
         }
@@ -39,7 +39,7 @@ namespace Logistics.Infrastructure.Managers.Implementations
             }
             catch (Exception exception)
             {
-                throw new LogisticsException(ErrorCode.UnableToDeletePhoto, exception.Message, exception);
+              //  throw new LogisticsException(ErrorCode.UnableToDeletePhoto, exception.Message, exception);
             }
 
             var directoryPath = Path.GetDirectoryName(path);

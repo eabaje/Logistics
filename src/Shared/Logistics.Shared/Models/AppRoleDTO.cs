@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.AspNetCore.Identity;
+
 // [JsonProperty.Json;
 
 namespace Logistics.Shared.Models
 {
-    [Serializable, JsonObject]
+
     public class AppRoleDTO 
     {
         // [JsonProperty("Description")]
