@@ -205,11 +205,18 @@ namespace Logistics.Service.API.Repository
                             .ToListAsync();
         }
 
-        public Task<IEnumerable<Transaction>> GetItemsByCritriaAsync(string criteria)
+        public async Task<IEnumerable<Transaction>> GetItemsByCritriaAsync(Func<Transaction, bool> query)
         {
-            throw new NotImplementedException();
-        }
+            List<Transaction> TransactionList = new List<Transaction>();
 
+            TransactionList =
+                            await _context
+                           .Transactions
+                           .ToListAsync();
+
+
+            return TransactionList.Where(query);
+        }
         public async Task<bool> DeleteItemAsync(string id)
         {
             var entity = _context
@@ -223,5 +230,7 @@ namespace Logistics.Service.API.Repository
             /* return*/
             return await _context.SaveChangesAsync() > 0;
         }
+
+      
     }
 }

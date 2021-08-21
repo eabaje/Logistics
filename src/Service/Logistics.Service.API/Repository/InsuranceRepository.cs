@@ -1,125 +1,68 @@
 ﻿
+using Logistics.Service.API.Data;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Carrier.Domain.Entities;
-using Carrier.FirebaseServer.Interface;
-using Carrier.FirebaseServer.Repository;
-using Firebase.Database;
-using Firebase.Database.Query;
+
 namespace Logistics.Service.API.Repository
 {
-    public class InsuranceRepository: FirebaseDataStore<Insurance>,IInsuranceService
+    public class InsuranceRepository:IInsuranceRepository
     {
-        private IFireBaseAuthService _authservice;
-        private readonly IInsuranceService _InsuranceRepository;
-
-       
 
 
-       
-        public InsuranceRepository( IFireBaseAuthService authService) : base(authService, "Insurance")
+
+
+
+
+        private readonly LogisticsDbContext _context;
+
+        public InsuranceRepository(LogisticsDbContext context)
         {
-           
-        }
-        public async Task<IEnumerable<Insurance>> GetAllInsurance()
-        {
-            try
-            {
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddInsurance(Insurance Insurance)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Insurance);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateInsurance(Insurance Insurance)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Insurance.InsuranceId.ToString(), Insurance);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Insurance> GetInsuranceById(string id)
-        {
-            try
-            {
-
-                var entity = await GetItemAsync(id);
-
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-
-
-        public async Task<IEnumerable<Insurance>> GetInsuranceByCarrier(string id)
+        public Task<bool> AddItemAsync(Insurance item)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Insurance>> GetInsuranceByDate(string datecriteria)
+        public Task<bool> DeleteItemAsync(string id)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(datecriteria);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
-        public async Task<bool> DeleteInsurance(string id)
-        {
-            try
-            {
-                bool done = await _InsuranceRepository.DeleteItemAsync(id);
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+        public Task<IEnumerable<Insurance>> GetInsuranceByCarrier(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Insurance>> GetInsuranceByDate(string InsureDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Insurance> GetItemAsync(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Insurance>> GetItemsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Insurance>> GetItemsByCritriaAsync(Func<Insurance, bool> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateItemAsync(Insurance item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

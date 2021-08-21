@@ -1,8 +1,10 @@
 ﻿using Logistics.Service.API.Data;
 using Logistics.Service.API.Entities;
 using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,138 +24,90 @@ namespace Logistics.Service.API.Repository
 
 
        
-        public async Task<IEnumerable<Carrier>> GetAllFreights()
+      
+
+        public async Task<IEnumerable<Carrier>> GetFreightCarrierByDate(DateTime fromDate, DateTime ToDate, string carrierId)
         {
-            try
-            {
+            List<Carrier> CarrierList = new List<Carrier>();
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddFreight(FreightCarrier Freight)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Freight);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateFreight(FreightCarrier Freight)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Freight.CarrierId.ToString(), Freight);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<FreightCarrier> GetFreightById(string id)
-        {
-            try
-            {
-
-                var entity = await GetItemAsync(id);
-
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            return CarrierList = (string.IsNullOrEmpty(carrierId)) ? await _context
+                       .Carriers
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Carriers
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p.CompanyId == int.Parse(carrierId))
+                       .ToListAsync();
         }
 
-
-
-        public async Task<IEnumerable<FreightCarrier>> GetFreightByCarrier(string id)
+        public async Task<bool> AddItemAsync(Carrier item)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            _context
+                          .Carriers
+                          .Add(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<FreightCarrier>> GetFreightCarrierByDate(string id)
+        public async Task<bool> UpdateItemAsync(Carrier item)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> DeleteFreight(string id)
-        {
-            try
-            {
-                bool done = await DeleteItemAsync(id);
+                          _context
+                          .Carriers
+                          .Update(item);
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Carrier>> GetFreightCarrierByDate(DateTime fromDate, DateTime ToDate, string carrierId)
+        public async Task<Entities.Carrier> GetItemAsync(string id)
         {
-            throw new NotImplementedException();
+            var Carrier = new Carrier();
+
+            return Carrier =
+                             await _context
+                            .Carriers
+                            .Where(p => p.CarrierId == Guid.Parse(id))
+                            .FirstOrDefaultAsync();
         }
 
-        public Task<bool> AddItemAsync(Carrier item)
+        public async Task<IEnumerable<Entities.Carrier>> GetItemsAsync()
         {
-            throw new NotImplementedException();
+            List<Carrier> CarrierList = new List<Carrier>();
+
+            return CarrierList =
+                             await _context
+                            .Carriers
+                            .ToListAsync();
         }
 
-        public Task<bool> UpdateItemAsync(Entities.Carrier item)
+        public async Task<IEnumerable<Carrier>> GetItemsByCritriaAsync(Func<Carrier, bool> query)
         {
-            throw new NotImplementedException();
+            List<Carrier> CarrierList = new List<Carrier>();
+
+            CarrierList =
+                            await _context
+                           .Carriers
+                           .ToListAsync();
+
+
+            return CarrierList.Where(query);
         }
 
-        public Task<Entities.Carrier> GetItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            throw new NotImplementedException();
+            var entity = _context
+                            .Carriers
+                            .FirstOrDefault(t => t.CarrierId == Guid.Parse(id));
+
+            _context.Carriers.Remove(entity);
+
+
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Entities.Carrier>> GetItemsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Entities.Carrier>> GetItemsByCritriaAsync(string criteria)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteItemAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

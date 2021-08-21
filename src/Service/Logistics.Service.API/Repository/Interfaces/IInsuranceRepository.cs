@@ -12,11 +12,8 @@ namespace Logistics.Service.API.Repository.Interfaces
 
         Task<IEnumerable<Insurance>> GetInsuranceByDate(string InsureDate);
 
-        Task<IEnumerable<Insurance>> GetAllInsurance();
+       
         Task<IEnumerable<Insurance>> GetInsuranceByCarrier(string id);
-        Task<bool> AddInsurance(Insurance item);
-        Task<bool> UpdateInsurance(Insurance item);
-        Task<Insurance> GetInsuranceById(string id);
-        Task<bool> DeleteInsurance(string id);
+     
     }
 }

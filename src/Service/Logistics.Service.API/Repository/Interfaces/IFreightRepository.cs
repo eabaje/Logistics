@@ -9,7 +9,7 @@ namespace Logistics.Service.API.Repository.Interfaces
 {
     public interface IFreightRepository : IDataStore<Carrier>
     {
-
+        
         Task<IEnumerable<Carrier>> GetFreightCarrierByDate(DateTime fromDate, DateTime ToDate, string carrierId);
 
 
