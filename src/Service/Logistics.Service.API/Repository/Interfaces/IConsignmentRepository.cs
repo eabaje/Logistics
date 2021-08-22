@@ -11,6 +11,6 @@ namespace Logistics.Service.API.Repository.Interfaces
     {
 
         Task<IEnumerable<Consignment>> GetConsignmentByDate(DateTime fromDate, DateTime ToDate, string consignmentId);
-
+        Task<IEnumerable<Consignment>> GetConsignmentByCarrier(string id);
     }
 }

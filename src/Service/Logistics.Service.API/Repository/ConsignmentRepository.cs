@@ -24,78 +24,7 @@ namespace Logistics.Service.API.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Consignment>> GetAllConsignments()
-        {
-            try
-            {
-
-                List<Consignment> ConsignmentList = new List<Consignment>();
-
-                return ConsignmentList =
-                                 await _context
-                                .Consignments
-                                .ToListAsync();
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddConsignment(Consignment Consignment)
-        {
-            try
-            {
-
-                _context
-                            .Consignments
-                            .Add(Consignment);
-
-                /* return*/
-                return await _context.SaveChangesAsync() > 0;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateConsignment(Consignment Consignment)
-        {
-            try
-            {
-
-                _context
-                        .Consignments
-                         .Update(Consignment);
-
-                /* return*/
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Consignment> GetConsignmentById(string id)
-        {
-            try
-            {
-
-                var Consignment = new Consignment();
-
-                return Consignment =
-                                 await _context
-                                .Consignments
-                                .Where(p => p.LoadId == int.Parse(id))
-                                .FirstOrDefaultAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
+    
 
 
         public async Task<IEnumerable<Consignment>> GetConsignmentByCarrier(string id)
@@ -117,51 +46,49 @@ namespace Logistics.Service.API.Repository
         }
 
       
-        public async Task<bool> DeleteConsignment(string id)
-        {
-            try
-            {
-                var entity = _context
-                              .Consignments
-                              .FirstOrDefault(t => t.LoadId == int.Parse(id));
-
-                _context.Consignments.Remove(entity);
-
-
-
-                /* return*/
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        Task<IEnumerable<Consignment>> IConsignmentRepository.GetConsignmentBy(string carrierId)
-        {
-            throw new NotImplementedException();
-        }
+     
+      
 
   
-        public Task<bool> AddItemAsync(Consignment item)
+        public async Task<bool> AddItemAsync(Consignment item)
         {
-            throw new NotImplementedException();
+            _context
+                           .Consignments
+                           .Add(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<bool> UpdateItemAsync(Consignment item)
+        public async Task<bool> UpdateItemAsync(Consignment item)
         {
-            throw new NotImplementedException();
+            _context
+                       .Consignments
+                        .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<Consignment> GetItemAsync(string id)
+        public async Task<Consignment> GetItemAsync(string id)
         {
-            throw new NotImplementedException();
+            var Consignment = new Consignment();
+
+            return Consignment =
+                             await _context
+                            .Consignments
+                            .Where(p => p.LoadId == int.Parse(id))
+                            .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Consignment>> GetItemsAsync()
+        public async Task<IEnumerable<Consignment>> GetItemsAsync()
         {
-            throw new NotImplementedException();
+            List<Consignment> ConsignmentList = new List<Consignment>();
+
+            return ConsignmentList =
+                             await _context
+                            .Consignments
+                            .ToListAsync();
         }
 
         public Task<IEnumerable<Consignment>> GetItemsByCritriaAsync(string criteria)
@@ -169,19 +96,45 @@ namespace Logistics.Service.API.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            throw new NotImplementedException();
+            var entity = _context
+                             .Consignments
+                             .FirstOrDefault(t => t.LoadId == int.Parse(id));
+
+            _context.Consignments.Remove(entity);
+
+
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Consignment>> GetConsignmentByDate(DateTime fromDate, DateTime ToDate, string consignmentId)
+        public async Task<IEnumerable<Consignment>> GetConsignmentByDate(DateTime fromDate, DateTime ToDate, string consignmentId)
         {
-            throw new NotImplementedException();
+            List<Consignment> ConsignmentList = new List<Consignment>();
+
+            return ConsignmentList = (string.IsNullOrEmpty(consignmentId)) ? await _context
+                       .Consignments
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Consignments
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p.LoadId == int.Parse(consignmentId))
+                       .ToListAsync();
         }
 
-        public Task<IEnumerable<Consignment>> GetItemsByCritriaAsync(Func<Consignment, bool> query)
+        public async Task<IEnumerable<Consignment>> GetItemsByCritriaAsync(Func<Consignment, bool> query)
         {
-            throw new NotImplementedException();
+            List<Consignment> ConsignmentList = new List<Consignment>();
+
+            ConsignmentList =
+                            await _context
+                           .Consignments
+                           .ToListAsync();
+
+
+            return ConsignmentList.Where(query);
         }
     }
 }

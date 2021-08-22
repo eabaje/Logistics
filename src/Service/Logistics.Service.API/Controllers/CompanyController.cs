@@ -1,54 +1,41 @@
-﻿using Carrier.Application.CQRS.CompanyRW.Commands;
-using Carrier.Application.CQRS.CompanyRW.Query;
-using Carrier.Application.CQRS.LoginRW.Commands;
-using Carrier.Application.DTO;
-using Logistics.Service.API.Repository.Interfaces;
-using Carrier.FirebaseServer.Repository;
-
-using Carrier.Infrastructure.Managers.Implemetations;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
+using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Logistics.Shared.Models;
+using AutoMapper;
+using Logistics.Service.API.Entities;
+using System.Net;
+using Microsoft.Extensions.Logging;
 
-namespace Logistics.Service.API.Controllers
+namespace Logistics.Repository.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CompanyController : Controller
     {
-        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        private ICompanyService _ICompanyStore;
-        private IFireBaseAuthService _authservice;
-        //private readonly VehicleService _vehicleService;
-        public CompanyController(IConfiguration config,ICompanyService ICompanyStore, IFireBaseAuthService authservice)
+        private readonly ILogger<CompanyController> _logger;
+        private ICompanyRepository _ICompanyStore;
+     
+        //private readonly VehicleRepository _vehicleRepository;
+        public CompanyController(IConfiguration config,ICompanyRepository ICompanyStore, ILogger<CompanyController> logger, IMapper mapper)
         {
            
             _ICompanyStore = ICompanyStore;
-            _authservice = authservice;
+            _mapper = mapper;
             _config = config;
 
-
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
 
        
 
-
-        public IActionResult AddCompany()
-        {
-            return View();
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult AddDriver()
-        {
-            return View();
-        }
 
        
         
@@ -57,44 +44,107 @@ namespace Logistics.Service.API.Controllers
 
         [HttpGet]
         [Route("Company/{CompanyId}")]
-        public async Task<IActionResult> GetCompany(int CompanyId)
+        public async Task<IActionResult> GetCompany(string CompanyId)
         {
-            var model = await _mediator.Send(new GetCompanyDetail { CompanyId = CompanyId });
-            if (model == null)
-                throw new ArgumentNullException(nameof(_mediator));
+            try
+            {
+                var entity = await _ICompanyStore.GetItemAsync(CompanyId);
 
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
-            return View(model);
+                 return Ok(entity); 
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+          
         }
 
         [HttpGet]
         [Route("Company/")]
         public async Task<IActionResult> GetCompanyList()
         {
-            var model = await _mediator.Send(new GetCompanyList { });
-            if (model == null)
-                return NotFound();
+            try
+            {
+                var entity = await _ICompanyStore.GetItemsAsync();
 
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
-            return View(model);
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
 
         [HttpPost]
-        [Route("Company/AddDriver")]
-        public async Task<IActionResult> AddDriver(AddCompany command)
+       // [Route("Company/AddDriver")]
+        public async Task<IActionResult> AddCompanyProfile(CompanyDTO company)
         {
-            var result = await _mediator.Send(command);
-            if (result.IsSuccess)
+            try
             {
+                var entity = await _ICompanyStore.AddItemAsync(_mapper.Map<Company>(company));
 
-                return View(new ResultMsg { Msg = "Company " + command.CompanyName + " added successfully " });
+               
 
-
+                return Ok(entity);
             }
-            else { return NotFound(); }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+        }
+
+        [HttpPut]
+        // [Route("Company/AddDriver")]
+        public async Task<IActionResult> UpdateCompanyProfile(CompanyDTO company)
+        {
+            try
+            {
+                var entity = await _ICompanyStore.UpdateItemAsync(_mapper.Map<Company>(company));
+
+
+
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
 
 
+        [HttpDelete("{id}")]
+
+        [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+              
+
+                return Ok(await _ICompanyStore.DeleteItemAsync(id));
+
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError($"Error: {exc}");
+                // transaction.Rollback();
+                return NotFound();
+            }
+        }
         //[HttpPost]
         //[AllowAnonymous]
         //public async Task<IActionResult> Register(AddCompany command)
@@ -103,7 +153,7 @@ namespace Logistics.Service.API.Controllers
         //    if (!result.IsSuccess)
         //    {
 
-        //        var plainTextContent = "Load Dispatch is your ideal partner with Load Board Services<b/>" +
+        //        var plainTextContent = "Load Dispatch is your ideal partner with Load Board Repositorys<b/>" +
         //      string.Format("Your  login password: New Password: <b>{0}</b>", pwd);
         //        var htmlContent = "<strong>" + plainTextContent + "</strong>";
 

@@ -81,6 +81,11 @@ namespace Logistics.Service.API.Repository
             return VehicleList.Where(query);
         }
 
+        public Task<IEnumerable<Vehicle>> GetVehicleByCarrier(string CarrierId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Vehicle>> GetVehicleByVehicle(string VehicleId)
         {
             throw new NotImplementedException();
