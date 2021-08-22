@@ -60,7 +60,7 @@ namespace Logistics.Service.API.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Entities.Carrier> GetItemAsync(string id)
+        public async Task<Carrier> GetItemAsync(string id)
         {
             var Carrier = new Carrier();
 
@@ -71,7 +71,7 @@ namespace Logistics.Service.API.Repository
                             .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Entities.Carrier>> GetItemsAsync()
+        public async Task<IEnumerable<Carrier>> GetItemsAsync()
         {
             List<Carrier> CarrierList = new List<Carrier>();
 

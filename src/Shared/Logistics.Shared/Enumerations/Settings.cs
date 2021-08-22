@@ -35,7 +35,7 @@ namespace Logistics.Shared.Enumerations
 
     public enum ShipperType
     {
-        individual,
+        Individual,
         Company,
        
 

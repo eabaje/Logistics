@@ -12,10 +12,10 @@ namespace Logistics.Service.API.Repository
     {
 
         Task<IEnumerable<Vehicle>> GetVehicleByCarrier(string CarrierId);
-        Task<IEnumerable<Vehicle>> GetAllVehicles();
-       Task<bool> AddVehicle(Vehicle item);
-        Task<bool> UpdateVehicle(Vehicle item);
-        Task<Vehicle> GetVehicleById(string id);
-        Task<bool> DeleteVehicle(string id);
+        Task<IEnumerable<Vehicle>> GetVehicleHistoryByDate(DateTime fromDate, DateTime ToDate, string vehicleId);
+      
+
+
+     
     }
 }

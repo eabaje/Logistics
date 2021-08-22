@@ -1,113 +1,103 @@
 ﻿
+using Logistics.Service.API.Data;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carrier.Domain.Entities;
-using Carrier.FirebaseServer.Interface;
-using Carrier.FirebaseServer.Repository;
-using Firebase.Database;
-using Firebase.Database.Query;
+
 namespace Logistics.Service.API.Repository
 {
-    public class ShipperRepository: FirebaseDataStore<Shipper>,IShipperService
+    public class ShipperRepository:IShipperRepository
     {
 
-        private IFireBaseAuthService _authservice;
-        private readonly IShipperService _ShipperRepository;
+        private readonly LogisticsDbContext _context;
 
-
-        public ShipperRepository(IFireBaseAuthService authService) : base(authService, "Shippers")
+        public ShipperRepository(LogisticsDbContext context)
         {
 
-           
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        
-        public async Task<IEnumerable<Shipper>> GetAllShippers()
+        public async Task<bool> AddItemAsync(Shipper item)
         {
-            try
-            {
+            _context
+                          .Shippers
+                          .Add(item);
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddShipper(Shipper Shipper)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Shipper);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateShipper(Shipper Shipper)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Shipper.CompanyId.ToString(), Shipper);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Shipper> GetShipperById(string id)
-        {
-            try
-            {
-
-                var entity = await GetItemAsync(id);
-
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-
-
-        public async Task<IEnumerable<Shipper>> GetShipperByName(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            var entity = _context
+                            .Shippers
+                            .FirstOrDefault(t => t.ShipperId == Guid.Parse(id));
+
+            _context.Shippers.Remove(entity);
+
+
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<bool> DeleteShipper(string id)
-        {
-            try
-            {
-                bool done = await DeleteItemAsync(id);
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+        public async Task<Shipper> GetItemAsync(string id)
+        {
+            var Shipper = new Shipper();
+
+            return Shipper =
+                             await _context
+                            .Shippers
+                            .Where(p => p.ShipperId == Guid.Parse(id))
+                            .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Shipper>> GetItemsAsync()
+        {
+            List<Shipper> ShipperList = new List<Shipper>();
+
+            return ShipperList =
+                             await _context
+                            .Shippers
+                            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Shipper>> GetItemsByCritriaAsync(Func<Shipper, bool> query)
+        {
+            List<Shipper> ShipperList = new List<Shipper>();
+
+            ShipperList =
+                            await _context
+                           .Shippers
+                           .ToListAsync();
+
+
+            return ShipperList.Where(query);
+        }
+
+        public async Task<IEnumerable<Shipper>> GetShipperByName(string shipperName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Shipper>> GetShipperHistoryByDate(DateTime fromDate, DateTime ToDate, string shipperId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> UpdateItemAsync(Shipper item)
+        {
+            _context
+                      .Shippers
+                      .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

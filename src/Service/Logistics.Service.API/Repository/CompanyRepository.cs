@@ -2,138 +2,106 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Carrier.Domain.Entities;
-using Firebase.Database;
-using Firebase.Database.Query;
-using Carrier.FirebaseServer.Repository;
-using Carrier.FirebaseServer.Interface;
+
 using System.Linq;
+using Logistics.Service.API.Repository.Interfaces;
+using Logistics.Service.API.Data;
+using Logistics.Service.API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logistics.Service.API.Repository
 {
-    public class CompanyRepository : FirebaseDataStore<Company>, ICompanyService
+    public class CompanyRepository : ICompanyRepository
     {
 
-        private IFireBaseAuthService _authservice;
-      
-        public CompanyRepository(IFireBaseAuthService authService) : base(authService, "Company")
+        private readonly LogisticsDbContext _context;
+
+        public CompanyRepository(LogisticsDbContext context)
         {
-           
+
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-      
-        public async Task<IEnumerable<Company>> GetAllCompanys()
+        public async Task<bool> AddItemAsync(Company item)
         {
-            try
-            {
+            _context
+                         .Companies
+                         .Add(item);
 
-                var lst = await GetItemsAsync(true);
-                return lst;
-
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddCompany(Company Company)
-        {
-            try
-            {
-
-                bool done = await AddItemAsync(Company);
-                return done;
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> UpdateCompany(Company Company)
-        {
-            try
-            {
-
-                bool done = await UpdateItemAsync(Company.CompanyId.ToString(), Company);
-
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<Company> GetCompanyById(Guid id)
-        {
-            try
-            {
-
-                var entity = await GetItemsAsync();
-
-                return entity.Where(a => a.CompanyId == id).FirstOrDefault(); ;
-            }
-            catch
-            {
-                throw;
-            }
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<Company>> GetCompanyByCategory(string category)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            try
-            {
+            var entity = _context
+                            .Companies
+                            .FirstOrDefault(t => t.CompanyId == int.Parse(id));
 
-                var entity = await GetItemsAsync();
+            _context.Companies.Remove(entity);
 
-                return entity.Where(a => a.Category == category).ToList(); ;
-            }
-            catch
-            {
-                throw;
-            }
+
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        //public async Task<string> GetCompanyByUserId(string id)
-        //{
-        //    try
-        //    {
-
-        //        var entity = await _CompanyRepository.GetItemAsync(id);
-
-        //        return entity;
-        //    }
-        //    catch
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        public async Task<IEnumerable<Company>> GetCompanyByCarrier(string id)
+        public async Task<IEnumerable<Company>> GetComapnyHistoryByDate(DateTime fromDate, DateTime ToDate, string companyId)
         {
-            try
-            {
-                var lst = await GetItemsByCritriaAsync(id);
-                return lst;
-            }
-            catch
-            {
-                throw;
-            }
+            List<Company> CompanyList = new List<Company>();
+
+            return CompanyList = (string.IsNullOrEmpty(companyId)) ? await _context
+                       .Companies
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Companies
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p.CompanyId == int.Parse(companyId))
+                       .ToListAsync();
         }
-        public async Task<bool> DeleteCompany(string id)
-        {
-            try
-            {
-                bool done = await DeleteItemAsync(id);
 
-                return done;
-            }
-            catch
-            {
-                throw;
-            }
+        public async Task<Company> GetItemAsync(string id)
+        {
+            var Company = new Company();
+
+            return Company =
+                             await _context
+                            .Companies
+                            .Where(p => p.CompanyId == int.Parse(id))
+                            .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Company>> GetItemsAsync()
+        {
+            List<Company> CompanyList = new List<Company>();
+
+            return CompanyList =
+                             await _context
+                            .Companies
+                            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Company>> GetItemsByCritriaAsync(Func<Company, bool> query)
+        {
+            List<Company> CompanyList = new List<Company>();
+
+            CompanyList =
+                            await _context
+                           .Companies
+                           .ToListAsync();
+
+
+            return CompanyList.Where(query);
+        }
+
+        public async Task<bool> UpdateItemAsync(Company item)
+        {
+            _context
+                          .Companies
+                          .Update(item);
+
+            /* return*/
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

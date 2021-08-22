@@ -21,6 +21,9 @@ namespace Logistics.Service.API.Entities
         public int FleetNumber { get; set; }
         public bool? Licensed { get; set; }
 
+        public string AboutUs { get; set; }
+        public string ServiceDescription { get; set; }
+
         ///  [ForeignKey(CompanyId)]
 
         public int? Rating { get; set; }

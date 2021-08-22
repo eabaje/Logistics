@@ -12,9 +12,7 @@ namespace Logistics.Service.API.Repository.Interfaces
     public interface ICompanyRepository : IDataStore<Company>
     {
 
-          Task<IEnumerable<Company>> GetCompanyByCarrier(string id);
-        Task<IEnumerable<Company>> GetCompanyByCategory(string category);
-        Task<Company> GetCompanyById(Guid companyId);
+        Task<IEnumerable<Company>> GetComapnyHistoryByDate(DateTime fromDate, DateTime ToDate, string companyId);
 
     }
 }

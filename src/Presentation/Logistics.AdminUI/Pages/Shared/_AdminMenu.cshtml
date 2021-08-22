@@ -1,0 +1,65 @@
+﻿<li><a href="/Home/Index" title="Dashboard"> <i class="icon-home"></i>Dashboard  </a></li>
+
+<li>
+    <a href="javascript:void(0);" title="Manage Consignment"> <i class="icon-check"></i> Load Management </a>
+    <ul class="sub-menu">
+        <li><a href="/Load/Index"><i class="icon-angle-right"></i> Consignment Listing</a></li>
+               <li><a title="All Professors" href="@Url.Action("Index", "Load")"><span class="mini-sub-pro">All Consignment Listing</span></a></li>
+        <li><a title="Add Professor" href="@Url.Action("AddLoad", "Load")"><span class="mini-sub-pro">Add Consignment</span></a></li>
+        <li><a title="Edit Professor" href="@Url.Action("Search", "Load")"><span class="mini-sub-pro">Match Load To Truck</span></a></li>
+        <li><a title="Professor Profile" href="@Url.Action("Carrier", "Load")"><span class="mini-sub-pro">Carrier Listing</span></a></li>
+    </ul>
+</li>
+
+<li>
+    <a href="javascript:void(0);" title="Journey Management"> <i class="icon-check"></i> Journey Management </a>
+    <ul class="sub-menu">
+        <li><a href="/Journey/Index"><i class="icon-angle-right"></i> Add Lab Assets</a></li>
+        <li><a title="All Students" href="@Url.Action("Index", "Journey")"><span class="mini-sub-pro">All Journey Listing</span></a></li>
+        <li><a title="Add Students" href="@Url.Action("AddJourney", "Journey")"><span class="mini-sub-pro">Add Journey</span></a></li>
+        <li><a title="Edit Students" href="@Url.Action("Search", "Journey")"><span class="mini-sub-pro">Edit Journey By Carrier</span></a></li>
+        <li><a title="Students Profile" href="@Url.Action("Report", "Journey")"><span class="mini-sub-pro">Create Report</span></a></li>
+    </ul>
+</li>
+
+<li>
+    <a href="javascript:void(0);" title="Driver Management"> <i class="icon-check"></i> Driver Management </a>
+    <ul class="sub-menu">
+        <li><a href="/Driver/Index"><i class="icon-angle-right"></i>All Driver Listing</a></li>
+        <li><a title="All Courses" href="@Url.Action("Index", "Driver")"><span class="mini-sub-pro">All Driver Listing</span></a></li>
+        <li><a title="Add Courses" href="@Url.Action("AddDriver", "Driver")"><span class="mini-sub-pro">Add Driver To Carrier</span></a></li>
+        <li><a title="Edit Courses" href="@Url.Action("Track", "Driver")"><span class="mini-sub-pro">Track Driver</span></a></li>
+        <li><a title="Edit Courses" href="@Url.Action("Report", "Driver")"><span class="mini-sub-pro">Create Report</span></a></li>
+    </ul>
+</li>
+<li>
+    <a href="javascript:void(0);" title="Fleet Management "> <i class="icon-check"></i> Fleet Management   </a>
+<ul class="sub-menu">
+    <li><a href="/Job/AddJobReview"><i class="icon-angle-right"></i>Create Job Review Form</a></li>
+    <li><a title="All Library" href="@Url.Action("Index", "Vehicle")"><span class="mini-sub-pro">Vehicle Listing</span></a></li>
+    <li><a title="All Library" href="@Url.Action("Search", "Vehicle")"><span class="mini-sub-pro">Search Vehicle By Carrier</span></a></li>
+    <li><a title="Add Library" href="@Url.Action("AddVehicle", "Vehicle")"><span class="mini-sub-pro">Add Vehicle Asset</span></a></li>
+    <li><a title="Edit Library" href="@Url.Action("Report", "Vehicle")"><span class="mini-sub-pro">Create Report</span></a></li>
+</ul>
+</li>
+
+
+<li>
+    <a href="javascript:void(0);" title="Manage Supplier"> <i class="icon-check"></i> Manage Supplier   </a>
+    <ul class="sub-menu">
+        <li><a href="/Supplier/AddSupplier"><i class="icon-angle-right"></i>Create Supplier Profile</a></li>
+        <li><a href="/Supplier/ViewSupplier"><i class="icon-angle-right"></i> View Supplier Profile</a></li>
+        <li><a href="/Supplier/Requisition"><i class="icon-angle-right"></i> Make Requisition</a></li>
+        <li><a href="/Supplier/ViewRequisition"><i class="icon-angle-right"></i> View Requisition</a></li>
+    </ul>
+</li>
+
+<li>
+    <a href="javascript:void(0);" title="Manage Lab Assets Group"> <i class="icon-check"></i> Report   </a>
+    <ul class="sub-menu">
+        <li><a href="/Report/Index"><i class="icon-angle-right"></i>Create dynamic Form</a></li>
+        <li><a href="/Job/ViewJobReview"><i class="icon-angle-right"></i> View Job Review</a></li>
+        <li><a href="/Job/AddJobApproval" class="icon-angle-right"></i> Upload QC Report</a></li>
+        <li><a href="/Job/ViewApproval"><i class="icon-angle-right"></i> view QC Report</a></li>
+    </ul>
+</li>

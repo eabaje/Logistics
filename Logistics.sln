@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistics.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistics.Persistence", "src\Infrastructure\Logistics.Persistence\Logistics.Persistence.csproj", "{C36B7519-CBB2-4CB1-8757-7441C85987AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistics.AdminUI", "src\Presentation\Logistics.AdminUI\Logistics.AdminUI.csproj", "{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{C36B7519-CBB2-4CB1-8757-7441C85987AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C36B7519-CBB2-4CB1-8757-7441C85987AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C36B7519-CBB2-4CB1-8757-7441C85987AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 		{5109C97F-219E-44E2-A974-B8E43D0F4871} = {A26D3601-FF56-4094-A58E-B711B108338A}
 		{F017575B-2F15-4DE7-99DA-943B70145D12} = {5109C97F-219E-44E2-A974-B8E43D0F4871}
 		{C36B7519-CBB2-4CB1-8757-7441C85987AB} = {5109C97F-219E-44E2-A974-B8E43D0F4871}
+		{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F} = {8FE36DB5-A03D-45D3-86B4-C946DD80DB59}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D1E0FB2-CA6C-4BD9-8977-D965951C0F34}

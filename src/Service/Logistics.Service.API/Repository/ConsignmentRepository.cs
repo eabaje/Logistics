@@ -173,5 +173,15 @@ namespace Logistics.Service.API.Repository
         {
             throw new NotImplementedException();
         }
+
+        public Task<IEnumerable<Consignment>> GetConsignmentByDate(DateTime fromDate, DateTime ToDate, string consignmentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Consignment>> GetItemsByCritriaAsync(Func<Consignment, bool> query)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
