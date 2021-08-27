@@ -1,4 +1,2538 @@
-﻿@page
+﻿@page "/shipper/add-vehicle"
 @model Logistics.AdminUI.Pages.Shipper.AddShipperModel
-@{
+
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 id="formTitle">
+                    Post a vehicle
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="container">
+
+                    <form action="/protected/listing/post-listing-submit-responsive" method="POST" id="postload_form">
+
+                        <input type="hidden" name="encryptedListingId" value="Q%2FpJy7fXY948PFNFUEFSQVRPUj4%2BCtHTl4oFfao8PFNFUEFSQVRPUj4%2BqOHnOv37T5s%3D">
+                        <div class="form-inline " style="padding-top:10px;">
+                            <div class="form-group">
+                                <div class="radio-inline">
+                                    <label for="postOnly">
+                                        <input type="radio" class="btn postType" id="postOnly" name="postType" value="postOnly" checked="checked">
+                                        <b>Post Only</b>
+                                    </label>
+                                </div>
+                                <div class="radio-inline ">
+                                    <label for="dispatchOnly">
+                                        <input type="radio" class="btn postType" id="dispatchOnly" name="postType" value="dispatchOnly">
+                                        <b>Dispatch Only</b>
+                                    </label>
+                                </div>
+                                <div class="radio-inline">
+                                    <label for="postStore">
+                                        <input type="radio" class="btn postType" id="postStore" name="postType" value="postStore">
+                                        <b>Post & Store Private Data for Dispatch</b> <span class="glyphicon glyphicon-info-sign" data-title="Make dispatching more convenient by entering details now without displaying them in search results."></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="alert alert-warning">
+                            Enter your vehicle listing.
+                            Do not post carrier availability, items for sale or other information.
+                            Use <a href="/protected/cargo/my-vehicles" title="My Vehicles">My Vehicles</a> to edit, assign and remove listings, and to track your dispatched vehicles.
+                        </p>
+                        <div class="row dispatchOnly hidden">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4>Carrier Information</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_companyName">Company Name <span class="glyphicon glyphicon-info-sign" data-title="Start typing a name and select from the drop down."></span></label>
+                                            <input class="form-control" type="text" required="required" name="carrier[companyName]" id="carrier_companyName" value="" />
+                                            <input type="hidden" name="carrier[id]" id="carrier_id" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_mcnum">MC#</label>
+                                            <input class="form-control" type="text" name="carrier[mcnum]" id="carrier_mcnum" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_contact">Contact</label>
+                                            <input class="form-control" name="carrier[contact]" id="carrier_contact" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_address1">Address</label>
+                                            <input class="form-control" name="carrier[address1]" id="carrier_address1" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <input class="form-control" name="carrier[address2]" id="carrier_address2" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+
+                                        <div class="col-xs-12" style="position:relative">
+                                            <div class="form-group has-feedback">
+                                                <label for="carrierCity">City</label>
+                                                <div class="input-group">
+                                                    <input class="form-control waypointCity" type="text" value="" name="carrier[city]" id="carrierCity" readonly="readonly" data-native-error="Valid city is required." />
+                                                </div>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <div class="help-block with-errors text-right small"></div>
+                                                <div class="FatMetro"></div>
+                                                <input type="hidden" class="waypointValid" id="carrierValid" name="carrier[valid]" value="1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 hidden" id="carrierSuggestions">
+                                            <label>Suggestions</label>
+                                            <div class="carrierFatSuggestions"><span>No Suggestions Available</span></div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group has-feedback">
+                                                <label for="carrierState">State</label>
+                                                <select class="form-control waypointState carrierState" disabled="disabled" data-readonly="readonly" id="carrierState" required="required" data-native-error="Valid state is required.">
+                                                    <option value=""></option>
+                                                    <option value="AL">Alabama</option>
+                                                    <option value="AK">Alaska</option>
+                                                    <option value="AZ">Arizona</option>
+                                                    <option value="AR">Arkansas</option>
+                                                    <option value="CA">California</option>
+                                                    <option value="CO">Colorado</option>
+                                                    <option value="CT">Connecticut</option>
+                                                    <option value="DE">Delaware</option>
+                                                    <option value="FL">Florida</option>
+                                                    <option value="GA">Georgia</option>
+                                                    <option value="HI">Hawaii</option>
+                                                    <option value="ID">Idaho</option>
+                                                    <option value="IL">Illinois</option>
+                                                    <option value="IN">Indiana</option>
+                                                    <option value="IA">Iowa</option>
+                                                    <option value="KS">Kansas</option>
+                                                    <option value="KY">Kentucky</option>
+                                                    <option value="LA">Louisiana</option>
+                                                    <option value="ME">Maine</option>
+                                                    <option value="MD">Maryland</option>
+                                                    <option value="MA">Massachusetts</option>
+                                                    <option value="MI">Michigan</option>
+                                                    <option value="MN">Minnesota</option>
+                                                    <option value="MS">Mississippi</option>
+                                                    <option value="MO">Missouri</option>
+                                                    <option value="MT">Montana</option>
+                                                    <option value="NE">Nebraska</option>
+                                                    <option value="NV">Nevada</option>
+                                                    <option value="NH">New Hampshire</option>
+                                                    <option value="NJ">New Jersey</option>
+                                                    <option value="NM">New Mexico</option>
+                                                    <option value="NY">New York</option>
+                                                    <option value="NC">North Carolina</option>
+                                                    <option value="ND">North Dakota</option>
+                                                    <option value="OH">Ohio</option>
+                                                    <option value="OK">Oklahoma</option>
+                                                    <option value="OR">Oregon</option>
+                                                    <option value="PA">Pennsylvania</option>
+                                                    <option value="RI">Rhode Island</option>
+                                                    <option value="SC">South Carolina</option>
+                                                    <option value="SD">South Dakota</option>
+                                                    <option value="TN">Tennessee</option>
+                                                    <option value="TX">Texas</option>
+                                                    <option value="UT">Utah</option>
+                                                    <option value="VT">Vermont</option>
+                                                    <option value="VA">Virginia</option>
+                                                    <option value="WA">Washington</option>
+                                                    <option value="DC">Washington DC</option>
+                                                    <option value="WV">West Virginia</option>
+                                                    <option value="WI">Wisconsin</option>
+                                                    <option value="WY">Wyoming</option>
+                                                    <option value="AB">Canada-Alberta</option>
+                                                    <option value="BC">Canada-British Columbia</option>
+                                                    <option value="MB">Canada-Manitoba</option>
+                                                    <option value="NB">Canada-New Brunswick</option>
+                                                    <option value="NL">Canada-Newfoundland</option>
+                                                    <option value="NT">Canada-Northwest Territories</option>
+                                                    <option value="NS">Canada-Nova Scotia</option>
+                                                    <option value="NU">Canada-Nunavut</option>
+                                                    <option value="ON">Canada-Ontario</option>
+                                                    <option value="PE">Canada-Prince Edward Island</option>
+                                                    <option value="QC">Canada-Quebec</option>
+                                                    <option value="SK">Canada-Saskatchewan</option>
+                                                    <option value="YT">Canada-Yukon</option>
+
+                                                </select>
+                                                <input type="hidden" name="carrier[state]" class="carrierState" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <div class="help-block with-errors text-right small"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group has-feedback">
+                                                <label for="carrierZip">Postal Code</label>
+                                                <input class="form-control waypointZip" type="text" value="" name="carrier[zip]" id="carrierZip" readonly="readonly" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <div class="help-block with-errors text-right small"></div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                        </script>
+                                        <style>
+                                            .carrierFatSuggestions {
+                                                display: block !important;
+                                            }
+
+                                                .carrierFatSuggestions > span,
+                                                .FatMore {
+                                                    font-size: small !important;
+                                                    font-style: italic;
+                                                }
+
+                                            .FatResults,
+                                            .FatMore {
+                                                line-height: 30px;
+                                            }
+
+                                            .margin-bottom-20 {
+                                                margin-bottom: 20px;
+                                            }
+                                        </style>
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                <label for="carrier_phone1">Phone #1</label>
+                                                <input class="form-control" name="carrier[phone1]" id="carrier_phone1" readonly="readonly" value="" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                <label for="carrier_phone2">Phone #2</label>
+                                                <input class="form-control" name="carrier[phone2]" id="carrier_phone2" readonly="readonly" value="" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                <label for="carrier_cell">Cell Phone</label>
+                                                <input class="form-control" name="carrier[cell]" id="carrier_cell" readonly="readonly" value="" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                <label for="carrier_fax">Fax</label>
+                                                <input class="form-control" name="carrier[fax]" id="carrier_fax" readonly="readonly" value="" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_driver_first_name">Driver's First Name</label>
+                                            <input class="form-control" name="carrier[driverFirstName]" id="carrier_driver_first_name" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_driver_last_name">Driver's Last Name</label>
+                                            <input class="form-control" name="carrier[driverLastName]" id="carrier_driver_last_name" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="carrier_driver_cell">Driver Phone</label>
+                                            <input class="form-control" name="carrier[driverCell]" id="carrier_driver_cell" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="pull-left">Your Company Information</h4>
+                                        <div class="pull-right"><a class="btn btn-default btn-lg" href="/protected/profile">Edit</a></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group has-feedback">
+                                            <label for="dispatcher_companyName">Company Name</label>
+                                            <input class="form-control" type="text" name="dispatcher[companyName]" id="dispatcher_companyName" readonly="readonly" value="Konor Autos Inc" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="dispatcher_mcnum">MC#</label>
+                                            <input class="form-control" type="text" name="dispatcher[mcnum]" id="dispatcher_mcnum" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="dispatcher_contact">Contact</label>
+                                            <input class="form-control" name="dispatcher[contact]" id="dispatcher_contact" readonly="readonly" value="Gabriel Ehima" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="dispatcher_address1">Address</label>
+                                            <input class="form-control" name="dispatcher[address1]" id="dispatcher_address1" readonly="readonly" value="5380 Oak Hill Terrace" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <input class="form-control" name="dispatcher[address2]" id="dispatcher_address2" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+
+                                        <div class="col-xs-12" style="position:relative">
+                                            <div class="form-group has-feedback">
+                                                <label for="dispatcherCity">City</label>
+                                                <div class="input-group">
+                                                    <input class="form-control waypointCity" type="text" value="Cumming" name="dispatcher[city]" id="dispatcherCity" readonly="readonly" data-native-error="Valid city is required." />
+                                                </div>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <div class="help-block with-errors text-right small"></div>
+                                                <div class="FatMetro"></div>
+                                                <input type="hidden" class="waypointValid" id="dispatcherValid" name="dispatcher[valid]" value="1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-12 hidden" id="dispatcherSuggestions">
+                                            <label>Suggestions</label>
+                                            <div class="dispatcherFatSuggestions"><span>No Suggestions Available</span></div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group has-feedback">
+                                                <label for="dispatcherState">State</label>
+                                                <select class="form-control waypointState dispatcherState" disabled="disabled" data-readonly="readonly" id="dispatcherState" required="required" data-native-error="Valid state is required.">
+                                                    <option value=""></option>
+                                                    <option value="AL">Alabama</option>
+                                                    <option value="AK">Alaska</option>
+                                                    <option value="AZ">Arizona</option>
+                                                    <option value="AR">Arkansas</option>
+                                                    <option value="CA">California</option>
+                                                    <option value="CO">Colorado</option>
+                                                    <option value="CT">Connecticut</option>
+                                                    <option value="DE">Delaware</option>
+                                                    <option value="FL">Florida</option>
+                                                    <option value="GA" selected="selected">Georgia</option>
+                                                    <option value="HI">Hawaii</option>
+                                                    <option value="ID">Idaho</option>
+                                                    <option value="IL">Illinois</option>
+                                                    <option value="IN">Indiana</option>
+                                                    <option value="IA">Iowa</option>
+                                                    <option value="KS">Kansas</option>
+                                                    <option value="KY">Kentucky</option>
+                                                    <option value="LA">Louisiana</option>
+                                                    <option value="ME">Maine</option>
+                                                    <option value="MD">Maryland</option>
+                                                    <option value="MA">Massachusetts</option>
+                                                    <option value="MI">Michigan</option>
+                                                    <option value="MN">Minnesota</option>
+                                                    <option value="MS">Mississippi</option>
+                                                    <option value="MO">Missouri</option>
+                                                    <option value="MT">Montana</option>
+                                                    <option value="NE">Nebraska</option>
+                                                    <option value="NV">Nevada</option>
+                                                    <option value="NH">New Hampshire</option>
+                                                    <option value="NJ">New Jersey</option>
+                                                    <option value="NM">New Mexico</option>
+                                                    <option value="NY">New York</option>
+                                                    <option value="NC">North Carolina</option>
+                                                    <option value="ND">North Dakota</option>
+                                                    <option value="OH">Ohio</option>
+                                                    <option value="OK">Oklahoma</option>
+                                                    <option value="OR">Oregon</option>
+                                                    <option value="PA">Pennsylvania</option>
+                                                    <option value="RI">Rhode Island</option>
+                                                    <option value="SC">South Carolina</option>
+                                                    <option value="SD">South Dakota</option>
+                                                    <option value="TN">Tennessee</option>
+                                                    <option value="TX">Texas</option>
+                                                    <option value="UT">Utah</option>
+                                                    <option value="VT">Vermont</option>
+                                                    <option value="VA">Virginia</option>
+                                                    <option value="WA">Washington</option>
+                                                    <option value="DC">Washington DC</option>
+                                                    <option value="WV">West Virginia</option>
+                                                    <option value="WI">Wisconsin</option>
+                                                    <option value="WY">Wyoming</option>
+                                                    <option value="AB">Canada-Alberta</option>
+                                                    <option value="BC">Canada-British Columbia</option>
+                                                    <option value="MB">Canada-Manitoba</option>
+                                                    <option value="NB">Canada-New Brunswick</option>
+                                                    <option value="NL">Canada-Newfoundland</option>
+                                                    <option value="NT">Canada-Northwest Territories</option>
+                                                    <option value="NS">Canada-Nova Scotia</option>
+                                                    <option value="NU">Canada-Nunavut</option>
+                                                    <option value="ON">Canada-Ontario</option>
+                                                    <option value="PE">Canada-Prince Edward Island</option>
+                                                    <option value="QC">Canada-Quebec</option>
+                                                    <option value="SK">Canada-Saskatchewan</option>
+                                                    <option value="YT">Canada-Yukon</option>
+
+                                                </select>
+                                                <input type="hidden" name="dispatcher[state]" class="dispatcherState" value="GA" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <div class="help-block with-errors text-right small"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group has-feedback">
+                                                <label for="dispatcherZip">Postal Code</label>
+                                                <input class="form-control waypointZip" type="text" value="30040" name="dispatcher[zip]" id="dispatcherZip" readonly="readonly" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <div class="help-block with-errors text-right small"></div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                        </script>
+                                        <style>
+                                            .dispatcherFatSuggestions {
+                                                display: block !important;
+                                            }
+
+                                                .dispatcherFatSuggestions > span,
+                                                .FatMore {
+                                                    font-size: small !important;
+                                                    font-style: italic;
+                                                }
+
+                                            .FatResults,
+                                            .FatMore {
+                                                line-height: 30px;
+                                            }
+
+                                            .margin-bottom-20 {
+                                                margin-bottom: 20px;
+                                            }
+                                        </style>
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                <label for="dispatcher_phone1">Company Phone</label>
+                                                <input class="form-control" name="dispatcher[phone1]" id="dispatcher_phone1" readonly="readonly" value="404-955-2848" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                <label for="dispatcher_phone2">Dispatch Phone</label>
+                                                <input class="form-control" name="dispatcher[phone2]" id="dispatcher_phone2" readonly="readonly" value="(404) 955-2848" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="dispatcher_fax">Fax</label>
+                                            <input class="form-control" name="dispatcher[fax]" id="dispatcher_fax" readonly="readonly" value="" />
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="alert alert-warning dispatchOnly postStore hidden">
+                            Pickup and delivery contact details and other dispatching information will remain hidden from carrier until they have accepted your dispatch.
+                        </p>
+                        <div class="hidden alert alert-danger" id="formErrors">There were errors detected in your submission.  Please review and resubmit.</div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4>Origin</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="dispatchOnly postStore hidden">
+                                            <input type="hidden" class="addressId" id="origin_addressId" name="origin_addressId" value="" />
+                                            <div class="form-group">
+                                                <div class="checkbox-inline">
+                                                    <label for="origin_isTerminal">
+                                                        <input type="checkbox" id="origin_isTerminal" name="origin[terminal]" value="1">
+                                                        <b>This is a Terminal</b>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="origin_companyName">Terminal, Dealer, or Auction <span class="glyphicon glyphicon-info-sign" data-title="Start typing a name in your address book and select from the drop down."></span></label>
+                                                <input class="form-control companyName" name="origin[company]" id="origin_companyName" value="" maxlength="150" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="origin_contact">Contact</label>
+                                                <input class="form-control" name="origin[contact]" id="origin_contact" value="" maxlength="150" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="origin_buyerNumber">Buyer Number</label>
+                                                <input class="form-control" name="origin[buyernum]" id="origin_buyerNumber" value="" maxlength="150" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="origin_phone1">Phone 1</label>
+                                                    <input class="form-control" name="origin[phone1]" id="origin_phone1" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="origin_phone2">Phone 2</label>
+                                                    <input class="form-control" name="origin[phone2]" id="origin_phone2" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="origin_phone3">Phone 3</label>
+                                                    <input class="form-control" name="origin[phone3]" id="origin_phone3" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="origin_phone4">Cell</label>
+                                                    <input class="form-control" name="origin[phone4]" id="origin_phone4" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="origin_address1">Address</label>
+                                                <input class="form-control" name="origin[address1]" id="origin_address1" value="" maxlength="54" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <input class="form-control" name="origin[address2]" id="origin_address2" value="" maxlength="54" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+
+                                        </div>
+                                        <div class='row'>
+
+                                            <div class="col-xs-12" style="position:relative">
+                                                <div class="form-group has-feedback">
+                                                    <label for="originCity">City</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control waypointCity" type="text" value="" name="origin[city]" id="originCity" data-location="origin" required="required" data-native-error="Valid city is required." />
+                                                        <div class="input-group-btn">
+                                                            <span id="originResetWaypoint" type="button" class="btn btn-default editVehicleType">&nbsp;<i class="fa fa-undo" aria-hidden="true"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <div class="help-block with-errors text-right small"></div>
+                                                    <div class="FatMetro"></div>
+                                                    <input type="hidden" class="waypointValid" id="originValid" name="origin[valid]" value="" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-12 hidden" id="originSuggestions">
+                                                <label>Suggestions</label>
+                                                <div class="originFatSuggestions"><span>No Suggestions Available</span></div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6">
+                                                <div class="form-group has-feedback">
+                                                    <label for="originState">State</label>
+                                                    <select class="form-control waypointState originState" name="origin[state]" id="originState" required="required" data-native-error="Valid state is required.">
+                                                        <option value=""></option>
+                                                        <option value="AL">Alabama</option>
+                                                        <option value="AK">Alaska</option>
+                                                        <option value="AZ">Arizona</option>
+                                                        <option value="AR">Arkansas</option>
+                                                        <option value="CA">California</option>
+                                                        <option value="CO">Colorado</option>
+                                                        <option value="CT">Connecticut</option>
+                                                        <option value="DE">Delaware</option>
+                                                        <option value="FL">Florida</option>
+                                                        <option value="GA">Georgia</option>
+                                                        <option value="HI">Hawaii</option>
+                                                        <option value="ID">Idaho</option>
+                                                        <option value="IL">Illinois</option>
+                                                        <option value="IN">Indiana</option>
+                                                        <option value="IA">Iowa</option>
+                                                        <option value="KS">Kansas</option>
+                                                        <option value="KY">Kentucky</option>
+                                                        <option value="LA">Louisiana</option>
+                                                        <option value="ME">Maine</option>
+                                                        <option value="MD">Maryland</option>
+                                                        <option value="MA">Massachusetts</option>
+                                                        <option value="MI">Michigan</option>
+                                                        <option value="MN">Minnesota</option>
+                                                        <option value="MS">Mississippi</option>
+                                                        <option value="MO">Missouri</option>
+                                                        <option value="MT">Montana</option>
+                                                        <option value="NE">Nebraska</option>
+                                                        <option value="NV">Nevada</option>
+                                                        <option value="NH">New Hampshire</option>
+                                                        <option value="NJ">New Jersey</option>
+                                                        <option value="NM">New Mexico</option>
+                                                        <option value="NY">New York</option>
+                                                        <option value="NC">North Carolina</option>
+                                                        <option value="ND">North Dakota</option>
+                                                        <option value="OH">Ohio</option>
+                                                        <option value="OK">Oklahoma</option>
+                                                        <option value="OR">Oregon</option>
+                                                        <option value="PA">Pennsylvania</option>
+                                                        <option value="RI">Rhode Island</option>
+                                                        <option value="SC">South Carolina</option>
+                                                        <option value="SD">South Dakota</option>
+                                                        <option value="TN">Tennessee</option>
+                                                        <option value="TX">Texas</option>
+                                                        <option value="UT">Utah</option>
+                                                        <option value="VT">Vermont</option>
+                                                        <option value="VA">Virginia</option>
+                                                        <option value="WA">Washington</option>
+                                                        <option value="DC">Washington DC</option>
+                                                        <option value="WV">West Virginia</option>
+                                                        <option value="WI">Wisconsin</option>
+                                                        <option value="WY">Wyoming</option>
+                                                        <option value="AB">Canada-Alberta</option>
+                                                        <option value="BC">Canada-British Columbia</option>
+                                                        <option value="MB">Canada-Manitoba</option>
+                                                        <option value="NB">Canada-New Brunswick</option>
+                                                        <option value="NL">Canada-Newfoundland</option>
+                                                        <option value="NT">Canada-Northwest Territories</option>
+                                                        <option value="NS">Canada-Nova Scotia</option>
+                                                        <option value="NU">Canada-Nunavut</option>
+                                                        <option value="ON">Canada-Ontario</option>
+                                                        <option value="PE">Canada-Prince Edward Island</option>
+                                                        <option value="QC">Canada-Quebec</option>
+                                                        <option value="SK">Canada-Saskatchewan</option>
+                                                        <option value="YT">Canada-Yukon</option>
+
+                                                    </select>
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <div class="help-block with-errors text-right small"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6">
+                                                <div class="form-group has-feedback">
+                                                    <label for="originZip">Postal Code</label>
+                                                    <input class="form-control waypointZip" type="text" value="" name="origin[zip]" id="originZip" data-location="origin" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <div class="help-block with-errors text-right small"></div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    var originManager = new Fat.Location.Manager({
+                                                        suggestions: $('.originFatSuggestions')[0],
+                                                        usePageWrapperPositioning: false
+                                                    });
+                                                    var originFS = new Fat.Location.Fieldset({
+                                                        city: $('#originCity')[0],
+                                                        state: $('#originState')[0],
+                                                        zip: $('#originZip')[0],
+                                                        metro: $('.originFatLocation').find('.FatMetro')[0],
+                                                        valid: $('#originValid')[0],
+                                                        clear: $('.originFatLocation').find('.FatClear')[0],
+                                                        spinner: $('.originFatLocation').find('.FatSpinner')[0],
+                                                        manager: originManager,
+                                                        identifier: 'origin',
+                                                        errorColor: '#ffffff'
+                                                    });
+                                                    $('#originCity,#originState,#originZip').on('keyup change blur', function (e) {
+                                                        if ($('#originValid').val() == 1) {
+                                                            $('#originSuggestions').hide();
+                                                        } else {
+                                                            $('#originSuggestions').show();
+                                                            $('#originSuggestions').removeClass('hidden');
+                                                        }
+                                                    });
+                                                    $('#originResetWaypoint').on('click', function (e) {
+                                                        $('#originCity').val('').trigger('blur');
+                                                        $('#originState').val('').trigger('blur');
+                                                        $('#originZip').val('').trigger('blur');
+                                                        $('.originFatLocation').find('.FatMetro').html('');
+                                                    });
+
+
+                                                });
+                                            </script>
+                                            <style>
+                                                .originFatSuggestions {
+                                                    display: block !important;
+                                                }
+
+                                                    .originFatSuggestions > span,
+                                                    .FatMore {
+                                                        font-size: small !important;
+                                                        font-style: italic;
+                                                    }
+
+                                                .FatResults,
+                                                .FatMore {
+                                                    line-height: 30px;
+                                                }
+
+                                                .margin-bottom-20 {
+                                                    margin-bottom: 20px;
+                                                }
+                                            </style>
+
+                                            <div class="dispatchOnly postStore hidden text-right">
+                                                <button type="button" class="btn btn-default saveContact">Save This Contact</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4>Destination</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="dispatchOnly postStore hidden">
+                                            <input type="hidden" class="addressId" id="destination_addressId" name="destination_addressId" value="" />
+                                            <div class="form-group">
+                                                <div class="checkbox-inline">
+                                                    <label for="destination_isTerminal">
+                                                        <input type="checkbox" id="destination_isTerminal" name="destination[terminal]" value="1">
+                                                        <b>This is a Terminal</b>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="destination_companyName">Terminal, Dealer, or Auction <span class="glyphicon glyphicon-info-sign" data-title="Start typing a name in your address book and select from the drop down."></span></label>
+                                                <input class="form-control companyName" name="destination[company]" id="destination_companyName" value="" maxlength="150" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="destination_contact">Contact</label>
+                                                <input class="form-control" name="destination[contact]" id="destination_contact" value="" maxlength="150" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="destination_buyerNumber">Buyer Number</label>
+                                                <input class="form-control" name="destination[buyernum]" id="destination_buyerNumber" value="" maxlength="150" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="destination_phone1">Phone 1</label>
+                                                    <input class="form-control" name="destination[phone1]" id="destination_phone1" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="destination_phone2">Phone 2</label>
+                                                    <input class="form-control" name="destination[phone2]" id="destination_phone2" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="destination_phone3">Phone 3</label>
+                                                    <input class="form-control" name="destination[phone3]" id="destination_phone3" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                                <div class="col-xs-12 col-md-6 form-group has-feedback">
+                                                    <label for="destination_phone4">Cell</label>
+                                                    <input class="form-control" name="destination[phone4]" id="destination_phone4" value="" maxlength="22" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <span class="help-block with-errors text-right small"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="destination_address1">Address</label>
+                                                <input class="form-control" name="destination[address1]" id="destination_address1" value="" maxlength="54" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <input class="form-control" name="destination[address2]" id="destination_address2" value="" maxlength="54" />
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+
+                                        </div>
+                                        <div class='row'>
+
+                                            <div class="col-xs-12" style="position:relative">
+                                                <div class="form-group has-feedback">
+                                                    <label for="destinationCity">City</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control waypointCity" type="text" value="" name="destination[city]" id="destinationCity" data-location="destination" required="required" data-native-error="Valid city is required." />
+                                                        <div class="input-group-btn">
+                                                            <span id="destinationResetWaypoint" type="button" class="btn btn-default editVehicleType">&nbsp;<i class="fa fa-undo" aria-hidden="true"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <div class="help-block with-errors text-right small"></div>
+                                                    <div class="FatMetro"></div>
+                                                    <input type="hidden" class="waypointValid" id="destinationValid" name="destination[valid]" value="" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-xs-12 hidden" id="destinationSuggestions">
+                                                <label>Suggestions</label>
+                                                <div class="destinationFatSuggestions"><span>No Suggestions Available</span></div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6">
+                                                <div class="form-group has-feedback">
+                                                    <label for="destinationState">State</label>
+                                                    <select class="form-control waypointState destinationState" name="destination[state]" id="destinationState" required="required" data-native-error="Valid state is required.">
+                                                        <option value=""></option>
+                                                        <option value="AL">Alabama</option>
+                                                        <option value="AK">Alaska</option>
+                                                        <option value="AZ">Arizona</option>
+                                                        <option value="AR">Arkansas</option>
+                                                        <option value="CA">California</option>
+                                                        <option value="CO">Colorado</option>
+                                                        <option value="CT">Connecticut</option>
+                                                        <option value="DE">Delaware</option>
+                                                        <option value="FL">Florida</option>
+                                                        <option value="GA">Georgia</option>
+                                                        <option value="HI">Hawaii</option>
+                                                        <option value="ID">Idaho</option>
+                                                        <option value="IL">Illinois</option>
+                                                        <option value="IN">Indiana</option>
+                                                        <option value="IA">Iowa</option>
+                                                        <option value="KS">Kansas</option>
+                                                        <option value="KY">Kentucky</option>
+                                                        <option value="LA">Louisiana</option>
+                                                        <option value="ME">Maine</option>
+                                                        <option value="MD">Maryland</option>
+                                                        <option value="MA">Massachusetts</option>
+                                                        <option value="MI">Michigan</option>
+                                                        <option value="MN">Minnesota</option>
+                                                        <option value="MS">Mississippi</option>
+                                                        <option value="MO">Missouri</option>
+                                                        <option value="MT">Montana</option>
+                                                        <option value="NE">Nebraska</option>
+                                                        <option value="NV">Nevada</option>
+                                                        <option value="NH">New Hampshire</option>
+                                                        <option value="NJ">New Jersey</option>
+                                                        <option value="NM">New Mexico</option>
+                                                        <option value="NY">New York</option>
+                                                        <option value="NC">North Carolina</option>
+                                                        <option value="ND">North Dakota</option>
+                                                        <option value="OH">Ohio</option>
+                                                        <option value="OK">Oklahoma</option>
+                                                        <option value="OR">Oregon</option>
+                                                        <option value="PA">Pennsylvania</option>
+                                                        <option value="RI">Rhode Island</option>
+                                                        <option value="SC">South Carolina</option>
+                                                        <option value="SD">South Dakota</option>
+                                                        <option value="TN">Tennessee</option>
+                                                        <option value="TX">Texas</option>
+                                                        <option value="UT">Utah</option>
+                                                        <option value="VT">Vermont</option>
+                                                        <option value="VA">Virginia</option>
+                                                        <option value="WA">Washington</option>
+                                                        <option value="DC">Washington DC</option>
+                                                        <option value="WV">West Virginia</option>
+                                                        <option value="WI">Wisconsin</option>
+                                                        <option value="WY">Wyoming</option>
+                                                        <option value="AB">Canada-Alberta</option>
+                                                        <option value="BC">Canada-British Columbia</option>
+                                                        <option value="MB">Canada-Manitoba</option>
+                                                        <option value="NB">Canada-New Brunswick</option>
+                                                        <option value="NL">Canada-Newfoundland</option>
+                                                        <option value="NT">Canada-Northwest Territories</option>
+                                                        <option value="NS">Canada-Nova Scotia</option>
+                                                        <option value="NU">Canada-Nunavut</option>
+                                                        <option value="ON">Canada-Ontario</option>
+                                                        <option value="PE">Canada-Prince Edward Island</option>
+                                                        <option value="QC">Canada-Quebec</option>
+                                                        <option value="SK">Canada-Saskatchewan</option>
+                                                        <option value="YT">Canada-Yukon</option>
+
+                                                    </select>
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <div class="help-block with-errors text-right small"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6">
+                                                <div class="form-group has-feedback">
+                                                    <label for="destinationZip">Postal Code</label>
+                                                    <input class="form-control waypointZip" type="text" value="" name="destination[zip]" id="destinationZip" data-location="destination" />
+                                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    <div class="help-block with-errors text-right small"></div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    var destinationManager = new Fat.Location.Manager({
+                                                        suggestions: $('.destinationFatSuggestions')[0],
+                                                        usePageWrapperPositioning: false
+                                                    });
+                                                    var destinationFS = new Fat.Location.Fieldset({
+                                                        city: $('#destinationCity')[0],
+                                                        state: $('#destinationState')[0],
+                                                        zip: $('#destinationZip')[0],
+                                                        metro: $('.destinationFatLocation').find('.FatMetro')[0],
+                                                        valid: $('#destinationValid')[0],
+                                                        clear: $('.destinationFatLocation').find('.FatClear')[0],
+                                                        spinner: $('.destinationFatLocation').find('.FatSpinner')[0],
+                                                        manager: destinationManager,
+                                                        identifier: 'destination',
+                                                        errorColor: '#ffffff'
+                                                    });
+                                                    $('#destinationCity,#destinationState,#destinationZip').on('keyup change blur', function (e) {
+                                                        if ($('#destinationValid').val() == 1) {
+                                                            $('#destinationSuggestions').hide();
+                                                        } else {
+                                                            $('#destinationSuggestions').show();
+                                                            $('#destinationSuggestions').removeClass('hidden');
+                                                        }
+                                                    });
+                                                    $('#destinationResetWaypoint').on('click', function (e) {
+                                                        $('#destinationCity').val('').trigger('blur');
+                                                        $('#destinationState').val('').trigger('blur');
+                                                        $('#destinationZip').val('').trigger('blur');
+                                                        $('.destinationFatLocation').find('.FatMetro').html('');
+                                                    });
+
+
+                                                });
+                                            </script>
+                                            <style>
+                                                .destinationFatSuggestions {
+                                                    display: block !important;
+                                                }
+
+                                                    .destinationFatSuggestions > span,
+                                                    .FatMore {
+                                                        font-size: small !important;
+                                                        font-style: italic;
+                                                    }
+
+                                                .FatResults,
+                                                .FatMore {
+                                                    line-height: 30px;
+                                                }
+
+                                                .margin-bottom-20 {
+                                                    margin-bottom: 20px;
+                                                }
+                                            </style>
+
+                                            <div class="dispatchOnly postStore hidden text-right">
+                                                <button type="button" class="btn btn-default saveContact">Save This Contact</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Vehicle Information</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-inline pull-left">
+                                    <div class="radio-inline">
+                                        <label for="runningRadio0">
+                                            <input type="radio" class="btn runningRadio" id="runningRadio0" name="vehicles[running]" value="1" checked="checked">
+                                            <b>Running</b>
+                                        </label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <label for="notRunningRadio0">
+                                            <input type="radio" class="btn runningRadio" id="notRunningRadio0" name="vehicles[running]" value="0">
+                                            <b>Not Running</b>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group has-feedback">
+                                    <label for="selTrailerType">Trailer Type </label>
+                                    <select id="selTrailerType" name="vehicles[trailerType]" class="form-control" required="required">
+                                        <option value=""></option>
+                                        <option value="Open" selected="selected">Open</option>
+                                        <option value="Enclosed">Enclosed</option>
+                                        <option value="Driveaway">Driveaway</option>
+
+                                    </select>
+                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                    <span class="help-block with-errors text-right small"></span>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="pull-left">Vehicles</h4>
+                                        <div class="pull-right"><a href="javascript:void(0)" class="addVehicle btn btn-default btn-lg">Add Vehicle</a></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="vehicles">
+                                        <div class="panel-body vehicle">
+                                            <div class="form-inline pull-left">
+                                                <input class="vehicleId" type="hidden" name="vehicles[vehicleDetail][0][id]" id="vehicleId0" value="" />
+                                                <input class="vehicleRemoved" type="hidden" name="vehicles[vehicleDetail][0][removed]" id="vehicleRemoved0" value="" />
+                                                <div class="form-group">
+                                                    <div class="radio-inline">
+                                                        <label for="ymmRadio0">
+
+                                                            <input type="radio" class="btn vehicleRadio ymmRadio" name="vehicles[vehicleDetail][0][inputType]" id="ymmRadio0" value="ymm0" checked="checked">
+                                                            Year, Make, and Model
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio-inline">
+                                                        <label for="vinRadio0">
+                                                            <input type="radio" class="btn vehicleRadio vinRadio" name="vehicles[vehicleDetail][0][inputType]" id="vinRadio0" value="vin0">
+                                                            Vin
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a href="javascript:void(0)" class="deleteVehicle btn btn-default hidden">Remove Vehicle</a>
+                                                <a href="javascript:void(0)" class="clearVehicle btn btn-default">Clear Vehicle</a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="vehicleInputOption vin0 hidden">
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="vin0">Vin</label>
+                                                            <input class="form-control vinInput" data-index="0" type="text" data-minlength="10" maxlength="17" name="vehicles[vehicleDetail][0][vin]" value="" id="vin0" required="required" />
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-8 vinLoader hidden">
+                                                        <br />
+                                                        <div class="alert alert-info"><i class="fa fa-circle-o-notch fa-spin"></i>  Decoding Vin</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="vehicle_year0">Year</label>
+                                                            <input class="form-control" name="vehicles[vehicleDetail][0][vehicle_year]" value="" id="vehicle_year0" readonly="readonly" data-readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="make0">Make</label>
+                                                            <input class="form-control" name="vehicles[vehicleDetail][0][make]" value="" id="make0" readonly="readonly" data-readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="model0">Model</label>
+                                                            <input class="form-control" name="vehicles[vehicleDetail][0][model]" value="" id="model0" readonly="readonly" data-readonly="readonly" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 vehicleTypeInputOptions">
+                                                        <div class="form-group has-feedback vehicleTypeSelect ">
+                                                            <label for="vinVehicleType0">Vehicle Type </label>
+                                                            <select id="vinVehicleType0" name="vehicles[vehicleDetail][0][vehicle_type]" class="form-control vehicleType" required="required">
+
+                                                                <option value="" selected="selected"></option>
+                                                                <option value="ATV">ATV</option>
+                                                                <option value="Boat">Boat</option>
+                                                                <option value="Car">Car</option>
+                                                                <option value="Heavy Equipment">Heavy Equipment</option>
+                                                                <option value="Large Yacht">Large Yacht</option>
+                                                                <option value="Motorcycle">Motorcycle</option>
+                                                                <option value="Pickup">Pickup</option>
+                                                                <option value="RV">RV</option>
+                                                                <option value="SUV">SUV</option>
+                                                                <option value="Travel Trailer">Travel Trailer</option>
+                                                                <option value="Van">Van</option>
+                                                                <option value="Other">Other</option>
+
+                                                            </select>
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                        <div class="form-group has-feedback vehicleTypeInput  hidden">
+                                                            <label for="vehicleTypeOther0">Other <span class="hidden-sm">Vehicle</span> Type</label>
+                                                            <div class="input-group">
+                                                                <input id="vehicleTypeOther0" name="vehicles[vehicleDetail][0][vehicleTypeOther]" class="form-control vehicleType vehicleTypeOther" disabled="disabled" required="required" value="" />
+                                                                <div class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default editVehicleType">&nbsp;<i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group vehicleInputOption ymm0 ">
+                                                <div class="row">
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="ymmVehicleYear0">Year</label>
+                                                            <input class="form-control ymmVehicleYear" type="number" min="1900" max="2031" name="vehicles[vehicleDetail][0][vehicle_year]" value="" id="ymmVehicleYear0" required="required" />
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="ymmMake0">Make</label>
+                                                            <input class="form-control ymmMake" type="text" name="vehicles[vehicleDetail][0][make]" value="" id="ymmMake0" required="required" maxlength="24" />
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="ymmModel0">Model</label>
+                                                            <input class="form-control ymmModel" type="text" name="vehicles[vehicleDetail][0][model]" value="" id="ymmModel0" required="required" />
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 vehicleTypeInputOptions">
+                                                        <div class="form-group has-feedback vehicleTypeSelect ">
+                                                            <label for="ymmVehicleType0">Vehicle Type</label>
+                                                            <select id="ymmVehicleType0" name="vehicles[vehicleDetail][0][vehicle_type]" class="form-control ymmVehicleType vehicleType" required="required">
+
+                                                                <option value="" selected="selected"></option>
+                                                                <option value="ATV">ATV</option>
+                                                                <option value="Boat">Boat</option>
+                                                                <option value="Car">Car</option>
+                                                                <option value="Heavy Equipment">Heavy Equipment</option>
+                                                                <option value="Large Yacht">Large Yacht</option>
+                                                                <option value="Motorcycle">Motorcycle</option>
+                                                                <option value="Pickup">Pickup</option>
+                                                                <option value="RV">RV</option>
+                                                                <option value="SUV">SUV</option>
+                                                                <option value="Travel Trailer">Travel Trailer</option>
+                                                                <option value="Van">Van</option>
+                                                                <option value="Other">Other</option>
+
+                                                            </select>
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                        <div class="form-group has-feedback vehicleTypeInput hidden">
+                                                            <label for="vehicleTypeOther0">Other <span class="hidden-sm">Vehicle</span> Type</label>
+                                                            <div class="input-group">
+                                                                <input id="vehicleTypeOther0" name="vehicles[vehicleDetail][0][vehicleTypeOther]" class="form-control vehicleType vehicleTypeOther" disabled="disabled" required="required" value="" />
+                                                                <div class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default editVehicleType">&nbsp;<i class="fa fa-undo" aria-hidden="true"></i></button>
+                                                                </div>
+                                                            </div>
+                                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                            <span class="help-block with-errors text-right small"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="qty0">Qty</label>
+                                                            <input class="form-control vehicleQty" name="vehicles[vehicleDetail][0][qty]" id="qty0" value="" type="number" min="1" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row additionalVehicleDetails">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group has-feedback">
+                                                        <label for="vehicleColor0">Vehicle Color</label>
+                                                        <input id="vehicleColor0" type="text" name="vehicles[vehicleDetail][0][color]" value="" class="form-control" />
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                        <span class="help-block with-errors text-right small"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group has-feedback">
+                                                        <label for="plate0">License Plate</label>
+                                                        <input id="plate0" type="text" name="vehicles[vehicleDetail][0][plate]" value="" class="form-control" maxlength="25" />
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                        <span class="help-block with-errors text-right small"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group has-feedback">
+                                                        <label for="vehicleLotNumber0">Lot Number</label>
+                                                        <input id="vehicleLotNumber0" type="text" name="vehicles[vehicleDetail][0][lotNumber]" value="" class="form-control" />
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                        <span class="help-block with-errors text-right small"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group has-feedback">
+                                                        <label for="vehicleState0">State/Province</label>
+                                                        <select id="vehicleState0" name="vehicles[vehicleDetail][0][state]" class="form-control">
+
+                                                            <option value="" selected="selected"></option>
+                                                            <option value="AL">Alabama</option>
+                                                            <option value="AK">Alaska</option>
+                                                            <option value="AZ">Arizona</option>
+                                                            <option value="AR">Arkansas</option>
+                                                            <option value="CA">California</option>
+                                                            <option value="CO">Colorado</option>
+                                                            <option value="CT">Connecticut</option>
+                                                            <option value="DE">Delaware</option>
+                                                            <option value="FL">Florida</option>
+                                                            <option value="GA">Georgia</option>
+                                                            <option value="HI">Hawaii</option>
+                                                            <option value="ID">Idaho</option>
+                                                            <option value="IL">Illinois</option>
+                                                            <option value="IN">Indiana</option>
+                                                            <option value="IA">Iowa</option>
+                                                            <option value="KS">Kansas</option>
+                                                            <option value="KY">Kentucky</option>
+                                                            <option value="LA">Louisiana</option>
+                                                            <option value="ME">Maine</option>
+                                                            <option value="MD">Maryland</option>
+                                                            <option value="MA">Massachusetts</option>
+                                                            <option value="MI">Michigan</option>
+                                                            <option value="MN">Minnesota</option>
+                                                            <option value="MS">Mississippi</option>
+                                                            <option value="MO">Missouri</option>
+                                                            <option value="MT">Montana</option>
+                                                            <option value="NE">Nebraska</option>
+                                                            <option value="NV">Nevada</option>
+                                                            <option value="NH">New Hampshire</option>
+                                                            <option value="NJ">New Jersey</option>
+                                                            <option value="NM">New Mexico</option>
+                                                            <option value="NY">New York</option>
+                                                            <option value="NC">North Carolina</option>
+                                                            <option value="ND">North Dakota</option>
+                                                            <option value="OH">Ohio</option>
+                                                            <option value="OK">Oklahoma</option>
+                                                            <option value="OR">Oregon</option>
+                                                            <option value="PA">Pennsylvania</option>
+                                                            <option value="RI">Rhode Island</option>
+                                                            <option value="SC">South Carolina</option>
+                                                            <option value="SD">South Dakota</option>
+                                                            <option value="TN">Tennessee</option>
+                                                            <option value="TX">Texas</option>
+                                                            <option value="UT">Utah</option>
+                                                            <option value="VT">Vermont</option>
+                                                            <option value="VA">Virginia</option>
+                                                            <option value="WA">Washington</option>
+                                                            <option value="DC">Washington DC</option>
+                                                            <option value="WV">West Virginia</option>
+                                                            <option value="WI">Wisconsin</option>
+                                                            <option value="WY">Wyoming</option>
+                                                            <option value="AB">Canada-Alberta</option>
+                                                            <option value="BC">Canada-British Columbia</option>
+                                                            <option value="MB">Canada-Manitoba</option>
+                                                            <option value="NB">Canada-New Brunswick</option>
+                                                            <option value="NL">Canada-Newfoundland</option>
+                                                            <option value="NT">Canada-Northwest Territories</option>
+                                                            <option value="NS">Canada-Nova Scotia</option>
+                                                            <option value="NU">Canada-Nunavut</option>
+                                                            <option value="ON">Canada-Ontario</option>
+                                                            <option value="PE">Canada-Prince Edward Island</option>
+                                                            <option value="QC">Canada-Quebec</option>
+                                                            <option value="SK">Canada-Saskatchewan</option>
+                                                            <option value="YT">Canada-Yukon</option>
+
+                                                        </select>
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                        <span class="help-block with-errors text-right small"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="checkbox-inline wideLoadDiv">
+                                                        <label for="wideLoadCheckbox0">
+                                                            <input type="checkbox" class="wideLoadCheckbox" id="wideLoadCheckbox0" name="vehicles[vehicleDetail][0][wideLoad]" value="1"
+                                                                   disabled="disabled">
+                                                            <span class="wideLoadSpan
+                                                                                                       ">Wide Load</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group has-feedback">
+                                                        <label for="vehicleAdditionalInfo0">Additional Vehicle Information</label>
+                                                        <textarea rows="4" maxlength="400" id="vehicleAdditionalInfo0" name="vehicles[vehicleDetail][0][vehicleAdditionalInfo]" class="form-control" />
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                        <span class="help-block with-errors text-right small"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Pickup and Delivery Dates</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group has-feedback">
+                                    <label for="dateAvailable">Date Available to Ship</label>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <label for="dateAvailable" class="input-group-addon btn">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            </label>
+                                            <input type="text" class="form-control" data-mintoday="true" id="dateAvailable" name="dates[available]" value="" readonly="readonly" data-readonly="readonly" />
+                                        </div>
+                                    </div>
+                                    <span class="help-block with-errors text-right small"></span>
+                                </div>
+                                <input type="hidden" class="form-control" id="desireddeliverydate" name="dates[desiredDelivery]" value="" />
+                                <div class="dispatchOnly hidden">
+                                    <p class="alert alert-danger hidden dateWarning">
+                                        Estimated dates are the standard. Other conditions may cost more. Be sure to talk with your carrier to make sure they are aware of these conditions.
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group has-feedback">
+                                                <label for="datePickupType">Date to Pickup</label>
+                                                <select class="form-control dateType" id="datePickupType" name="dates[pickup][type]" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="Estimated">Estimated</option>
+                                                    <option value="Exactly">Exactly</option>
+                                                    <option value="No Earlier Than">No Earlier Than</option>
+                                                    <option value="No Later Than">No Later Than</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group has-feedback">
+                                                <label for="datePickup">Pickup Date</label>
+                                                <div class="input-group">
+                                                    <label for="datePickup" class="input-group-addon btn">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="datePickup" name="dates[pickup][date]" value="" readonly="readonly" data-readonly="readonly" />
+                                                </div>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group has-feedback">
+                                                <label for="dateDeliveryType">Date to Deliver</label>
+                                                <select class="form-control dateType" id="dateDeliveryType" name="dates[delivery][type]" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="Estimated">Estimated</option>
+                                                    <option value="Exactly">Exactly</option>
+                                                    <option value="No Earlier Than">No Earlier Than</option>
+                                                    <option value="No Later Than">No Later Than</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12  col-sm-6">
+                                            <div class="form-group has-feedback">
+                                                <label for="dateDelivery">Delivery Date</label>
+                                                <div class="input-group">
+                                                    <label for="dateDelivery" class="input-group-addon btn">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="dateDelivery" name="dates[delivery][date]" value="" readonly="readonly" data-readonly="readonly" />
+                                                </div>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default pricing">
+                            <div class="panel-heading">
+                                <h4>Pricing and Payment</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group has-feedback">
+                                    <label class="pull-left" for="minPayPrice">
+                                        Price to Pay Carrier <span class="glyphicon glyphicon-info-sign" data-title="The total price for moving all vehicles in this listing."></span>
+                                    </label>
+                                    <span class="pull-right">
+                                        <a href="javascript:void(0)" id="checkPrices" class="btn btn-default">Check Prices</a>
+                                        <input type="hidden" id="b_t" value="6122d479f37a0=6122d479f37db">
+                                    </span>
+                                    <div class="clearfix"></div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="number" class="form-control" id="minPayPrice" name="price[total]" value="" required="required" min="1">
+                                    </div>
+                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                    <span class="help-block with-errors text-right small"></span>
+                                </div>
+                                <div class="hidden samplePrices"></div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="codAmount">COD/COP Amount</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="number" class="form-control" id="codAmount" name="price[cod][amount]" value="" required="required">
+                                            </div>
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="codcop hidden">
+                                            <div class="form-group has-feedback">
+                                                <label for="cod_payment_method">COD/COP Payment Method</label>
+                                                <select class="form-control" name="price[cod][method]" id="cod_payment_method" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="Cash/Certified Funds">Cash/Certified Funds</option>
+                                                    <option value="Check">Check</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="cod_where">COD/COP Location</label>
+                                                <select class="form-control" name="price[cod][where]" id="cod_where" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="D">Delivery</option>
+                                                    <option value="P">Pickup</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="balanceAmount">Balance Amount</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="number" class="form-control" id="balanceAmount" name="price[balance][amount]" value="" readonly="readonly">
+                                            </div>
+                                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                            <span class="help-block with-errors text-right small"></span>
+                                        </div>
+                                        <div class="balance hidden">
+                                            <div class="form-group has-feedback">
+                                                <label for="balancePaymentMethod">Balance Payment Method</label>
+                                                <select class="form-control" name="price[balance][method]" id="balancePaymentMethod" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="Cash">Cash</option>
+                                                    <option value="Certified Funds">Certified Funds</option>
+                                                    <option value="Company Check">Company Check</option>
+                                                    <option value="Comchek">Comchek</option>
+                                                    <option value="TCH">TCH</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="balanceTime">Balance Payment Time</label>
+                                                <select class="form-control" name="price[balance][when]" id="balanceTime" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="immediately">Immediately</option>
+                                                    <option value="2 business days (Quick Pay)">2 Business Days (Quick Pay)</option>
+                                                    <option value="5 business days">5 Business Days</option>
+                                                    <option value="10 business days">10 Business Days</option>
+                                                    <option value="15 business days">15 Business Days</option>
+                                                    <option value="30 business days">30 Business Days</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label for="balanceWhere">Balance Payment Terms Begin On</label>
+                                                <select class="form-control" name="price[balance][where]" id="balanceWhere" required="required">
+                                                    <option value="" selected="selected"></option>
+                                                    <option value="pickup">Pickup</option>
+                                                    <option value="delivery">Delivery</option>
+                                                    <option value="receiving a signed Bill of Lading">Receiving a Signed Bill of Lading</option>
+
+                                                </select>
+                                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                                <span class="help-block with-errors text-right small"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p class="alert alert-danger codPayor hidden">
+                                            <span class="codPayorText"></span>
+                                        </p>
+                                        <p class="alert alert-danger balancePayor hidden">
+                                            <span class="balancePayorText"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Additional Information</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group has-feedback">
+                                    <label for="txtOrderId">Order ID <span class="glyphicon glyphicon-info-sign" data-title="This field is intended for you to identify your dispatched order. It can be anything you would like up to 50 characters."></span></label>
+                                    <input class="form-control" maxlength="50" name="userDefined[orderId]" id="txtOrderId" placeholder="Order ID" type="text" value="" />
+                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                    <span class="help-block with-errors text-right small"></span>
+                                </div>
+                                <div class="form-group has-feedback">
+                                    <label for="additionalInfo">Additional Terms <span class="glyphicon glyphicon-info-sign" data-title="Payment terms, non-vehicle information. Up to 60 characters."></span></label>
+                                    <input class="form-control" id="additionalInfo" name="userDefined[additionalInfo]" maxlength="60" type="text" value="" />
+                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                    <span class="help-block with-errors text-right small"></span>
+                                </div>
+                                <div class="dispatchOnly postStore hidden">
+                                    <div class="form-group has-feedback">
+                                        <label for="dispatchInstructions">Special Instructions <span class="glyphicon glyphicon-info-sign" data-title="Central Dispatch will automatically add dispatch instructions for you regarding your pickup and delivery dates."></span></label>
+                                        <textarea class="form-control" id="dispatchInstructions" name="userDefined[instructions]" rows="10"></textarea>
+                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                        <span class="help-block with-errors text-right small"></span>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label for="dispatchCustomerNotes">Notes from Customer</label>
+                                        <textarea class="form-control" id="dispatchCustomerNotes" name="userDefined[customerNotes]" rows="10"></textarea>
+                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                        <span class="help-block with-errors text-right small"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default dispatchOnly hidden">
+                            <div class="panel-heading">
+                                <h4 class="pull-left">Your Contract <span class="glyphicon glyphicon-info-sign small" data-title='The contract below will be displayed when the carrier accepts your dispatch sheet. If you would like to change your contract, you may do so by clicking "edit" before requesting this carrier.'></span></h4>
+                                <div class="pull-right"><a class="btn btn-default btn-lg" href="/protected/contract">Edit</a></div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="panel-body">
+                                none
+                            </div>
+                        </div>
+                        <div class="panel panel-default finalize">
+                            <div class="panel-heading">
+                                <h4>
+                                    Post Listing
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group has-feedback alert alert-info">
+                                    <div class="checkbox-inline">
+                                        <label for="acknowledge">
+                                            <input type="checkbox" id="acknowledge" name="acknowledge" required="required" />
+                                            <b>
+                                                I acknowledge and agree that once the carrier has accepted my request, I will be entered into a
+                                                legal contract with the carrier for the transport of my vehicle(s). I further acknowledge and agree
+                                                that Dealertrack Central Dispatch, Inc. is not a party to such contract, and has no obligation or
+                                                liability whatsoever arising out of such contract. I consent to Dealertrack Central Dispatch, Inc.
+                                                adding a provision to this effect in my dispatch sheets. I also understand that any changes that
+                                                I make to the dispatch sheet after the carrier has accepted my request, unless the carrier has
+                                                approved the change, may not be binding on the carrier.
+                                            </b>
+                                        </label>
+                                    </div>
+                                    <span class="help-block with-errors text-right small"></span>
+                                </div>
+
+                                <input type="hidden" name="loadId" value="">
+                                <input type="hidden" name="dsid" value="">
+                                <input type="hidden" name="dispatch_sheet_id" value="">
+                                <input type="hidden" name="autoId" id="autoId" value="1">
+                                <input type="hidden" name="Load_ID" value="">
+                                <input type="hidden" name="load_posted" value="">
+                                <input type="hidden" name="load_archived" value="">
+                                <input type="hidden" name="price[payor]" id="payor" value="dispatcher">
+                                <div class="form-group text-right postOnly postStore hidden">
+                                    <div class="checkbox-inline">
+                                        <label for="postAnother">
+                                            <input type="checkbox" id="postAnother" name="postAnother" value="1">
+                                            Post Another
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group text-right">
+                                    <input class="btn btn-primary" id="submitListing" type="submit" value="Post Listing">
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="CSRFToken" name="CSRFToken" value="46a799fa66eaf80058b4ebf9deb435844ef29c3733bfe96be62a582a4ed69992" />
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script src="/assets/js/responsive/base.js"></script>
+@section Scripts{
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+           
+            $.each($('#accountNavLinks li'), function (index, li) {
+                var clone = $(li).clone().addClass('visible-xs');
+                $('#accountNav').parent().append(clone);
+            });
+
+            $.each($('#searchNavLinks li'), function (index, li) {
+                var clone = $(li).clone().addClass('visible-xs');
+                $('#searchNav').append(clone);
+            });
+        });
+    </script>
+
+    <script type="text/javascript" src="/assets/js/shared/Fat/Location.js"></script>
+    <script>
+        $(document).ready(function () {
+            var hideFloat = function (floatingElement, hidingElementId) {
+                var rect = $('#' + hidingElementId)[0].getBoundingClientRect();
+                var isHidingElementVisible = (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                ) ? true : false;
+                if (isHidingElementVisible) {
+                    floatingElement.hide();
+                    $('body').css({
+                        'margin-top': 0,
+                    });
+
+                } else {
+                    floatingElement.show();
+                    $('body').css({
+                        'margin-top': floatingElement.outerHeight(),
+                    });
+                }
+            }
+            $(document).on('click', '.bodyHeight', function () {
+                $('body').css({
+                    'margin-top': 0,
+                });
+            });
+            $(':input').each(function (i, e) {
+                if ($(e).attr('required') == 'required' || $(e).attr('data-readonly') == 'readonly') {
+                    $(e).on('change', function () {
+                        var requiredFinished = true;
+                        $(':input').filter(':visible').each(function (i, e) {
+                            if ($(e).attr('required') == 'required' || $(e).attr('data-readonly') == 'readonly') {
+                                if (!$(e).val()) {
+                                    requiredFinished = false;
+                                }
+                            }
+                        });
+                        $('.alert-floating').remove();
+                        $(window).off('scroll');
+                        if (requiredFinished) {
+                            var hidingElement = $('#submitListing');
+                            var floatingElement = $('<div>').addClass('alert alert-info alert-dismissable alert-floating')
+                                .append($('<h4>').html($('#formTitle').html().trim() + '!'))
+                                .append($('<button>').attr({
+                                    type: "button",
+                                    class: "close",
+                                    'data-dismiss': "alert"
+                                }).html('&times;'))
+                                .append(hidingElement.clone().attr({
+                                    id: 'floatingSubmit'
+                                }));
+                            $(e).closest('form').append(floatingElement);
+                            $('body').css({
+                                'margin-top': floatingElement.outerHeight(),
+                            });
+                            hideFloat(floatingElement, hidingElement.attr('id'));
+                            $(window).on('scroll', function (event) {
+                                hideFloat(floatingElement, hidingElement.attr('id'));
+                            });
+                        }
+                    });
+                }
+            });
+
+            var vehicleQuantityChange = function () {
+                var qty = $(this).val();
+                var details = $(this).parents('.vehicleInputOption').siblings('.additionalVehicleDetails');
+                if (qty > 1) {
+                    details.find('.form-control').each(function () {
+                        $(this).val('');
+                    });
+                    details.slideUp();
+                } else {
+                    details.slideDown();
+                }
+            };
+
+            $('.vehicleQty').on('change', vehicleQuantityChange);
+
+            $('.samplePrices').on('click', '.showListing', function () {
+                $.ajax({
+                    type: "GET",
+                    url: '/protected/listing/details',
+                    data: {
+                        id: $(this).attr('data-id')
+                    },
+                    success: function (data) {
+                        $('#samplePricesListingPreview').html(data);
+                    }
+                });
+            })
+            $('#minPayPrice').on('change', function () {
+                $('#codAmount').trigger('change');
+            });
+            $('.pricing').on('change', ':input', function () {
+                var codPayorText;
+                var balancePayorText;
+                $('#balanceAmount').val($('#minPayPrice').val() - $('#codAmount').val());
+                if ($('#codAmount').val() > 0) {
+                    $('.codcop').removeClass('hidden').show();
+                    $('.codPayor').removeClass('hidden').show();
+                    codPayorText = 'The carrier will receive ' + ('$' + $('#codAmount').val()).bold();
+                    if ($('#cod_payment_method').val() != '') {
+                        codPayorText = codPayorText + ' via ' + $('#cod_payment_method option:selected').text().bold();
+                    }
+                    if ($('#cod_where').val() != '') {
+                        codPayorText = codPayorText + ' at ' + $('#cod_where option:selected').text().bold();
+                    }
+                    $('#payor').val('dispatcher');
+                } else {
+                    $('.codcop').hide();
+                    $('.codPayor').hide();
+                }
+                $('.balance').removeClass('hidden').show();
+                if ($('#balanceAmount').val() > 0) {
+                    $('.balancePayor').removeClass('hidden').show();
+                    balancePayorText = 'You will pay the carrier ' + ('$' + $('#balanceAmount').val()).bold();
+                    $('#payor').val('dispatcher');
+                } else if ($('#balanceAmount').val() < 0) {
+                    $('#balanceAmount').val(Math.abs($('#balanceAmount').val()));
+                    $('.balancePayor').removeClass('hidden').show();
+                    balancePayorText = 'The carrier will pay you ' + ('$' + $('#balanceAmount').val()).bold();
+                    $('#payor').val('carrier');
+                } else {
+                    $('.balance').hide();
+                    $('.balancePayor').hide();
+                }
+                if ($('#balancePaymentMethod').val() != '') {
+                    balancePayorText = balancePayorText + ' via ' + $('#balancePaymentMethod option:selected').text().bold()
+                }
+                if ($('#balanceTime').val() != '') {
+                    balancePayorText = balancePayorText + (($('#balanceTime option:selected').text() == 'Immediately')
+                        ? ' '
+                        : ' within ') +
+                        $('#balanceTime option:selected').text().bold();
+                }
+                if ($('#balancePaymentMethod').val() != '') {
+                    balancePayorText + ' after ' + $('#balanceWhere option:selected').text().bold();
+                }
+                if ($('#balanceWhere').val() != '') {
+                    balancePayorText = balancePayorText + ' of ' + $('#balanceWhere option:selected').text().bold();
+                }
+                $('.balancePayorText').html(balancePayorText);
+                $('.codPayorText').html(codPayorText)
+            });
+            $(".saveContact").on('click', function () {
+                var responder = $(this).parent();
+                var addressEntry = new Object;
+                addressEntry.phoneNumbers = new Array();
+                responder.find('.alert').remove();
+                $.each($(this).closest('.panel').find('input,select'), function (i, el) {
+                    var id = $(this).attr('id').replace(/origin|destination|_/g, '').toLowerCase();
+                    switch (id) {
+                        case 'isterminal':
+                            if ($(el).is(':checked')) {
+                                addressEntry.isTerminal = true;
+                            }
+                            break;
+                        case 'phone1':
+                            addressEntry.phoneNumbers[0] = $(el).val();
+                            break;
+                        case 'phone2':
+                            addressEntry.phoneNumbers[1] = $(el).val();
+                            break;
+                        case 'phone3':
+                            addressEntry.phoneNumbers[2] = $(el).val();
+                            break;
+                        case 'phone4':
+                            addressEntry.phoneNumbers[3] = $(el).val();
+                            break;
+                        case 'buyernumber':
+                            addressEntry.buyerNumber = $(el).val();
+                            break;
+                        case 'companyname':
+                            addressEntry.companyName = $(el).val();
+                            break;
+                        case 'addressid':
+                            addressEntry.id = $(el).val();
+                            break;
+                        default:
+                            addressEntry[id] = $(el).val();
+                            break;
+                    }
+                });
+                addressEntry.CSRFToken = $('#CSRFToken').val();
+                if (addressEntry.companyName.length > 0 &&
+                    ((addressEntry.city.length > 0 &&
+                        addressEntry.state.length > 0) ||
+                        addressEntry.zip.length > 0) &&
+                    addressEntry.valid == 1
+                ) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/protected/address-book/create/',
+                        data: addressEntry,
+                        success: function (data) {
+                            var data = $.parseJSON(data);
+                            var verb = (data.id == addressEntry.id) ? 'updat' : 'sav';
+                            if (data.success) {
+                                responder.append($('<p>')
+                                    .addClass('alert alert-success alert-dismissible')
+                                    .html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>' + addressEntry.companyName + '</b>' + ' was ' + verb + 'ed in the address book.')
+                                );
+                            } else {
+                                responder.append($('<p>')
+                                    .addClass('alert alert-danger alert-dismissible')
+                                    .html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>There was an error while ' + verb + 'ing your address book.')
+                                );
+                            }
+                        }
+                    });
+                } else {
+                    responder.append($('<p>')
+                        .addClass('alert alert-danger alert-dismissible')
+                        .html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Please enter a company name and a valid location.')
+                    );
+                }
+            })
+            $(".vehicles").on('change', 'select.vehicleType', function () {
+                if ($(this).val() == 'Other') {
+                    var el = $(this).closest('.vehicleTypeInputOptions');
+                    el.find('.vehicleTypeInput').removeClass('hidden').show();
+                    el.find('.vehicleTypeSelect').hide();
+                    el.find('select').attr({
+                        disabled: 'disabled'
+                    });
+                    el.find('input').removeAttr('disabled').focus();
+                } else {
+                    $(this).closest('.vehicle').find('.vehicleTypeOther').attr({
+                        'disabled': 'disabled'
+                    });
+                    $(this).closest('.vehicleTypeSelect').show().find('select').removeAttr('disabled');
+                }
+                var wideLoadArray = ['Heavy Equipment', 'Large Yacht', 'Other'];
+                var wideLoadSelector = $(this).closest('.vehicle').find('.wideLoadCheckbox').first();
+                var wideLoadSpanSelector = $(this).closest('.vehicle').find('.wideLoadSpan').first();
+
+                console.log(wideLoadSelector);
+                if (wideLoadArray.indexOf($(this).val()) == -1) {
+                    wideLoadSelector.prop('disabled', true);
+                    wideLoadSpanSelector.addClass('color-gray-medium');
+                }
+                else {
+                    wideLoadSelector.prop('disabled', false);
+                    wideLoadSpanSelector.removeClass('color-gray-medium');
+                }
+
+            });
+            $(".vehicles").on('click', '.editVehicleType', function () {
+                var el = $(this).closest('.vehicleTypeInputOptions');
+                el.find('select').removeAttr('disabled').val('').focus();
+                el.find('.vehicleTypeSelect').removeClass('hidden').show();
+                el.find('.vehicleTypeInput').hide();
+                el.find('input').attr({
+                    disabled: 'disabled'
+                });
+            });
+            $(".vehicles").on('change', '.ymmModel', function () {
+                var vehicle = {
+                    make: $(this).closest('.vehicleInputOption').find('.ymmMake').val(),
+                    model: $(this).closest('.vehicleInputOption').find('.ymmModel').val(),
+                    year: $(this).closest('.vehicleInputOption').find('.ymmVehicleYear').val(),
+                }
+                setVehicleTypeOptions(vehicle, $(this).closest('.vehicleInputOption').find('.ymmVehicleType'))
+            });
+            $(".vehicles").on('keydown', '.ymmMake', function () {
+                $(this).autocomplete({
+                    autoFocus: false,
+                    source: function (request, response) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/protected/listing/get-makes-partial?term=' + request.term,
+                            success: function (data) {
+                                var parsed = $.parseJSON(data);
+                                response(parsed);
+                            }
+                        });
+                    }
+                }).autocomplete('widget').attr({
+                    'id': $(this).attr('id') + '_autocomplete'
+                })
+            });
+            $(".vehicles").on('keydown', '.ymmModel', function () {
+                $(this).autocomplete({
+                    autoFocus: false,
+                    source: function (request, response) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/protected/listing/get-models-partial?make=' + $(this.element[0]).closest('.vehicleInputOption').find('.ymmMake').val() + '&model=' + request.term,
+                            success: function (data) {
+                                var parsed = $.parseJSON(data);
+                                response(parsed);
+                            }
+                        });
+                    },
+                    select: function (event, ui) {
+                        $(this).val(ui.item.value);
+                        $(this).trigger('change');
+                    }
+                }).autocomplete('widget').attr({
+                    'id': $(this).attr('id') + '_autocomplete'
+                })
+            });
+            $("#carrier_companyName").on('blur', function () {
+                if ($(this).val() == '') {
+                    $(this).closest('.panel').find(':input').val("");
+                }
+            });
+            $("#carrier_companyName").autocomplete({
+                autoFocus: false,
+                source: function (request, response) {
+                    $.ajax({
+                        type: "GET",
+                        url: '/protected/dispatch/search-carrier-json?searchString=' + encodeURIComponent(request.term),
+                        success: function (data) {
+                            var parsed = $.parseJSON(data);
+                            var carrierNames = new Array;
+                            $.each(parsed, function (i, e) {
+                                carrierNames.push({
+                                    label: e[1].replace(/=> /, '(').replace(/$/, ')'),
+                                    value: e[0]
+                                });
+                            })
+                            response(carrierNames);
+                        }
+                    });
+                },
+                change: function (event, ui) {
+                    if (!ui.item) {
+                        $(this).closest('.panel').find(':input').val("");
+                    }
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    this.value = ui.item.label;
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $.ajax({
+                        type: "GET",
+                        url: '/protected/dispatch/get-carrier-json?carrierId=' + ui.item.value,
+                        success: function (data) {
+                            var parsed = $.parseJSON(data);
+                            $('#carrier_id').val(ui.item.value);
+                            $.each(parsed, function (i, e) {
+                                switch (i) {
+                                    case 'carrier_company':
+                                        $('#carrier_companyName').val(e);
+                                        break;
+                                    case 'carrier_city':
+                                        $('#carrierCity').val(e);
+                                        break;
+                                    case 'carrier_state':
+                                        $('.carrierState').val(e);
+                                        break;
+                                    case 'carrier_zip':
+                                        $('#carrierZip').val(e);
+                                        break;
+                                    default:
+                                        $('#' + i).val(e);
+                                        break;
+                                }
+                            })
+                        }
+                    });
+                }
+            }).autocomplete('widget').attr({
+                'id': 'carrier_companyName_autocomplete'
+            });
+            $(".companyName").on('keyup', function () {
+                $(this).closest('.panel').find('.addressId').val(0);
+            });
+
+            $(".companyName").each(function (i, e) {
+                $(e).autocomplete({
+                    autoFocus: false,
+                    source: function (request, response) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/protected/address-book/search?hint=' + request.term,
+                            success: function (data) {
+                                var parsed = $.parseJSON(data);
+                                var addressBookNames = new Array;
+                                $.each(parsed, function (i, e) {
+                                    addressBookNames.push({
+                                        label: e.companyName,
+                                        value: e.id
+                                    });
+                                });
+                                addressBookNames.sort((a, b) => {
+                                    return a.label > b.label ? 1 : -1;
+                                });
+                                response(addressBookNames);
+                            }
+                        });
+                    },
+                    focus: function (event, ui) {
+                        event.preventDefault();
+                        this.value = ui.item.label;
+                    },
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        var parentEl = $(this);
+                        $.ajax({
+                            type: "GET",
+                            url: '/protected/address-book/retrieve?id=' + ui.item.value,
+                            success: function (data) {
+                                var addressEntry = $.parseJSON(data);
+                                var matches = parentEl.attr('id').match(/(origin|destination|_)/g);
+                                $('#' + matches[0] + 'Valid').val(1);
+                                $.each(parentEl.closest('.panel').find('input,select'), function (i, el) {
+                                    $('#' + matches[0] + 'Valid').val(1);
+                                    var id = $(this).attr('id').replace(/(origin|destination|_)/g, '').toLowerCase();
+                                    switch (id) {
+                                        case 'isterminal':
+                                            if (addressEntry.isTerminal) {
+                                                $(el).attr({
+                                                    checked: 'checked'
+                                                });
+                                            } else {
+                                                $(el).removeAttr('checked');
+                                            }
+                                            break;
+                                        case 'phone1':
+                                            $(el).val(addressEntry.phoneNumbers[0]);
+                                            break;
+                                        case 'phone2':
+                                            $(el).val(addressEntry.phoneNumbers[1]);
+                                            break;
+                                        case 'phone3':
+                                            $(el).val(addressEntry.phoneNumbers[2]);
+                                            break;
+                                        case 'phone4':
+                                            $(el).val(addressEntry.phoneNumbers[3]);
+                                            break;
+                                        case 'buyernumber':
+                                            $(el).val(addressEntry.buyerNumber);
+                                            break;
+                                        case 'companyname':
+                                            $(el).val(addressEntry.companyName);
+                                            $(el).attr({
+                                                'value': addressEntry.companyName
+                                            });
+                                            break;
+                                        case 'addressid':
+                                            $(el).val(addressEntry.id);
+                                            break;
+                                        case 'valid':
+                                            $(el).val(1);
+                                            break;
+                                        case 'zip':
+                                            $(el).val(addressEntry.zip);
+                                            $(el).trigger('focus');
+                                            break;
+                                        default:
+                                            $(el).val(addressEntry[id]);
+                                            $(el).attr({
+                                                'value': addressEntry[id]
+                                            });
+                                            break;
+                                    }
+                                    $(el).trigger('change');
+                                });
+                            }
+                        });
+                    }
+                }).autocomplete('widget').attr({
+                    'id': $(e).attr('id') + '_autocomplete'
+                })
+            });
+            var vehicleIndex = 0;
+            var radioFix = new Array;
+            $('.addVehicle').on('click', function () {
+                vehicleIndex++;
+
+                //Let's be able to delete the first vehicle when there is more than one.
+                var firstDelete = $('.vehicle').first().find('.deleteVehicle');
+                if ($(firstDelete).hasClass('deleteVehicle')) {
+                    $(firstDelete).removeClass('hidden').show();
+                }
+
+                $('.vehicle').first().clone()
+                    .appendTo(".vehicles")
+                    .find("*")
+                    .each(function () {
+                        if ($(this).hasClass('additionalVehicleDetails')) {
+                            $(this).show();
+                        }
+
+                        if ($(this).hasClass('vehicleRadio') || $(this).hasClass('runningRadio')) {
+                            if ($(this).is(':checked')) {
+                                radioFix.push(this.id);
+                            }
+                            if ($(this).hasClass('vinRadio') || $(this).hasClass('ymmRadio')) {
+                                this.value = this.value.replace(/\d+/, vehicleIndex);
+                            }
+                        }
+                        if ($(this).hasClass('wideLoadSpan')) {
+                            $(this).addClass('color-gray-medium');
+                        }
+                        if ($(this).hasClass('wideLoadCheckbox')) {
+                            $(this).attr('checked', false);
+                            $(this).attr('disabled', true);
+                        }
+                        if ($(this).hasClass('vehicleInputOption')) {
+                            var classList = $(this).attr('class');
+                            console.log(classList);
+                            $(this).removeClass();
+
+                            //check if this is vin or description
+                            if (classList.indexOf('vin') !== -1) {
+                                $(this).addClass('vehicleInputOption').addClass('vin' + vehicleIndex);
+                            }
+                            else {
+                                $(this).addClass('vehicleInputOption').addClass('ymm' + vehicleIndex);
+                                $(this).addClass('form-group');
+                            }
+
+                            //Should this be hidden?
+                            if (classList.indexOf('hidden') !== -1) {
+                                $(this).addClass('hidden');
+                            }
+
+                        }
+                        if ($(this).is('input[type=text],input[type=number],select,input[type=hidden]') || $(this).is('[readonly]')) {
+                            $(this).val('');
+                        }
+                        if (typeof (this.id) != 'undefined' && this.id.length > 0) {
+                            this.id = this.id.replace(/\d+/, vehicleIndex);
+                        }
+                        if (typeof (this.name) != 'undefined' && this.name.length > 0) {
+                            this.name = this.name.replace(/\d+/, vehicleIndex);
+                        }
+                        if (typeof ($(this).attr('for')) != 'undefined' && $(this).attr('for').length > 0) {
+                            $(this).attr({
+                                'for': $(this).attr('for').replace(/\d+/, vehicleIndex)
+                            });
+                        }
+                        if ($(this).hasClass('deleteVehicle')) {
+                            $(this).removeClass('hidden').show();
+                        }
+                        if ($(this).hasClass('vinInput')) {
+                            $(this).data('index', vehicleIndex).on('change', function () {
+                                decodeVin($(this));
+                            });
+                        }
+
+                        if ($(this).hasClass('vehicleQty')) {
+                            $(this).on('change', vehicleQuantityChange);
+                        }
+                    })
+                if (radioFix.length > 0) {
+                    $.each(radioFix, function (i, e) {
+                        $("#" + e).trigger('click');
+                    });
+                }
+            });
+            $('.vehicles').on('click', '.restoreVehicle', function () {
+                var vehicle = $(this).closest(".vehicle");
+                vehicle.find('.removedOverlay').remove();
+                vehicle.find('div').fadeTo('fast', 1);
+                vehicle.find('.vehicleRemoved').val('');
+            });
+            $('.vehicles').on('click', '.clearVehicle', function () {
+                var vehicle = $(this).closest(".vehicle");
+                vehicle.find(':input').not('[type=radio]').not('[type=hidden]').val('');
+            });
+            $('.vehicles').on('click', '.deleteVehicle', function () {
+
+                var vehicle = $(this).closest(".vehicle");
+                if (vehicle.find('.vehicleId').val() != '') {
+                    vehicle.css({
+                        position: 'relative'
+                    })
+                    vehicle.find('div').fadeTo('fast', .70);
+                    vehicle.find('.vehicleRemoved').val(1);
+                    var overlay = $('<div>').css({
+                        top: '0',
+                        left: '0',
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        zIndex: '1000',
+                        textAlign: 'center',
+                    }).addClass('removedOverlay').html("<h4>Vehicle Removed <a href='javascript:void(0)' class='restoreVehicle'><span class='glyphicon glyphicon-edit'></span></h4></a>");
+                    vehicle.prepend(overlay)
+                } else {
+                    vehicle.remove();
+                }
+
+                //If there is only one left do not allow the user to remove it.
+                var numVehicles = $('.vehicle').size();
+                if (numVehicles == 1) {
+                    $('.deleteVehicle').addClass('hidden').hide();
+                }
+
+
+            });
+            $('.vehicles').on('change', '.vehicleRadio', function () {
+                $(this).closest(".vehicle").find('.vehicleInputOption').hide();
+                $(this).closest(".vehicle").find('.vehicleInputOption').find('input, select').attr({
+                    'disabled': true
+                });
+                $('.' + this.value).removeClass('hidden').show();
+                $('.' + this.value).removeClass('hidden').find('input, select').attr({
+                    'disabled': false
+                });
+            });
+            $('.postType').on('change', function () {
+                $('.postStore').hide();
+                $('.dispatchOnly').hide();
+                $('.' + this.value).removeClass('hidden').show();
+                if (this.value == 'dispatchOnly') {
+                    $('.wideLoadDiv').hide();
+                    $('.finalize').find('.panel-heading h4').html('Request Carrier');
+                    $('#postload_form').attr({
+                        'action': '/protected/dispatch/form'
+                    });
+                    $('.desiredDeliveryDateDiv').hide()
+                } else {
+                    $('.wideLoadDiv').show();
+                    $('.finalize').find('.panel-heading h4').html('Post Listing');
+                    $('#postload_form').attr({
+                        'action': '/protected/listing/post-listing-submit-responsive'
+                    });
+                    $('.desiredDeliveryDateDiv').show()
+                }
+            });
+            $("#dateAvailable").datepicker({
+                dateFormat: "mm/dd/yy",
+                minDate: 0,
+            });
+            $("#desireddeliverydate").datepicker({
+                dateFormat: "mm/dd/yy",
+                minDate: 0,
+            });
+            $("#datePickup").datepicker({
+                dateFormat: "mm/dd/yy",
+                minDate: 0,
+            });
+            $("#dateDelivery").datepicker({
+                dateFormat: "mm/dd/yy",
+                minDate: 0,
+            });
+            $(".dateType").on('change', function () {
+                if ($(this).val() != 'Estimated') {
+                    $('.dateWarning').removeClass('hidden').show();
+                } else {
+                    $('.dateWarning').hide();
+                }
+                switch ($(this).val()) {
+                    case 'Estimated':
+                        $(this).siblings('.help-block').text('Estimate only. +/- 2 days');
+                        break;
+                    case 'Exactly':
+                        $(this).siblings('.help-block').text('This must be picked up exactly on the date');
+                        break;
+                    case 'No Earlier Than':
+                        $(this).siblings('.help-block').text('On or up to 2 days after');
+                        break;
+                    case 'No Later Than':
+                        $(this).siblings('.help-block').text('On or up to 2 days prior');
+                        break;
+                }
+            });
+            var setVehicleTypeOptions = function (vehicle, target) {
+                vehicle.CSRFToken = $('#CSRFToken').val();
+                $.ajax({
+                    type: "POST",
+                    url: '/protected/listing/get-vehicle-type',
+                    data: vehicle,
+                    success: function (data) {
+                        var data = $.parseJSON(data);
+                        $(target).val(data.vehicle_type).trigger('change');
+                    }
+                });
+            }
+
+            var spin = function ($el) {
+                var angle = 360;
+                $({
+                    deg: 0
+                }).animate({
+                    deg: angle
+                }, {
+                    duration: 2000,
+                    step: function (now) {
+                        $el.css({
+                            transform: 'rotate(' + now + 'deg)'
+                        });
+                    }
+                });
+            };
+            $('#postload_form').validator({
+                custom: {
+                    readonly: function ($el) {
+                        return $el.val().length > 0;
+                    },
+                    mintoday: function ($el) {
+                        return new Date($el.val()) >= new Date().setHours(0, 0, 0, 0);
+                    },
+                    minavailabledate: function ($el) {
+                        return $el.val().length < 1 || new Date($el.val()) >= $("#dateAvailable").datepicker("getDate");
+                    },
+                },
+                errors: {
+                    location: "Location not valid; choose a suggestion or continue filling out form.",
+                    readonly: "Please fill out this field.",
+                    mintoday: "Date must be today or later.",
+                    minavailabledate: "Must be greater or equal to date available to ship"
+                }
+            }).on('submit', function (e) {
+                if (e.isDefaultPrevented()) {
+                    $('html, body').animate({
+                        scrollTop: $(".has-error").first().offset().top
+                    }, 100);
+                } else {
+                    // verify that the location is valid before continuing
+                    var invalid_waypoints = [];
+                    $('.waypointValid').each(function (i, el) {
+                        if ($(el).val() == "0") {
+                            var error_field = $(el).attr('id').split(/Valid/);
+                            invalid_waypoints.push(error_field[0]);
+                        }
+                    });
+                    if (invalid_waypoints.length > 0) {
+                        // show there are errors on the page
+                        $("#formErrors").removeClass('hidden');
+                        $('html, body').animate({
+                            scrollTop: $("#formErrors").offset().top
+                        }, 100);
+
+                        for (i = 0; i < invalid_waypoints.length; i++) {
+                            var city = invalid_waypoints[i];
+                            $('#' + city + 'City').parent().addClass('has-error');
+                            $('#' + city + 'State').parent().addClass('has-error');
+                        }
+
+                        return false;
+                    }
+
+                    var submitParent = $('#submitListing').parent();
+                    var floatingParent = $('#floatingSubmit').parent();
+                    $('#submitListing').attr({ 'disabled': true }).remove();
+                    $('#floatingSubmit').attr({ 'disabled': true }).remove();
+                    submitParent.append('<i class="fa fa-spinner" aria-hidden="true"></i>');
+                    floatingParent.append('<i class="fa fa-spinner" aria-hidden="true"></i>');
+
+                    $('#postload_form').find(':input:hidden').each(function (i, e) {
+                        if ($(e).attr('type') != 'hidden') {
+                            $(e).attr({
+                                'disabled': true
+                            });
+                        }
+                        $('.postType').removeAttr('disabled');
+                    })
+                }
+            });
+
+            $('.vinInput').on('change', function () {
+                decodeVin($(this));
+            });
+
+            function decodeVin(input) {
+                var vehicleIndex = input.data('index');
+
+                var parentEl = input.parent();
+                parentEl.addClass('has-success').removeClass('has-error');
+                parentEl.find('.help-block').html('');
+
+                if (vehicleIndex != null) {
+                    var vin = input.val();
+                    var loader = input.closest('.row').find('.vinLoader');
+
+                    loader.removeClass('hidden');
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/protected/listing/get-vin-results',
+                        data: {
+                            vin: vin,
+                            CSRFToken: $('#CSRFToken').val()
+                        },
+                        success: function (data) {
+                            var data = $.parseJSON(data);
+
+                            if (data.success) {
+                                var model = '';
+                                if (typeof (data.models) != 'undefined') {
+                                    model = data.models[0];
+                                }
+                                $('#make' + vehicleIndex).val(data.make).trigger('change');
+                                $('#model' + vehicleIndex).val(model).trigger('change');
+                                $('#vehicle_year' + vehicleIndex).val(data.year).trigger('change');
+                                var vehicle = {
+                                    make: data.make,
+                                    model: model,
+                                    year: data.year
+                                }
+                                setVehicleTypeOptions(vehicle, $('#vinVehicleType' + vehicleIndex));
+                                parentEl.find('.vinAppendLink').remove();
+                            } else {
+                                parentEl.removeClass('has-success').addClass('has-error');
+                                var vinAppendLink = $('<a>').attr({
+                                    'href': 'javascript:void(0)',
+                                    'class': 'text-right small vinAppendLink',
+                                }).on('click', function (e) {
+                                    $('#vehicleAdditionalInfo' + vehicleIndex).val(
+                                        ($('#vehicleAdditionalInfo' + vehicleIndex).val() + "\n" + 'Partial Vin: ' + input.val()).trim()
+                                    ).trigger('change');
+                                    $(this).remove();
+                                    $('#vin' + vehicleIndex).trigger('focusout');
+                                    $('#vin' + vehicleIndex).val('');
+                                    $('#ymmRadio' + vehicleIndex).trigger('click');
+                                    $('.ymm' + vehicleIndex).find(':input').trigger('blur');
+                                }).html('Vin does not validate, click to add to vehicle information.');
+
+                                parentEl.find('.vinAppendLink').remove();
+                                parentEl.append(vinAppendLink);
+
+                                $('#make' + vehicleIndex).val('');
+                                $('#model' + vehicleIndex).val('');
+                                $('#vehicle_year' + vehicleIndex).val('');
+                                $('#vinVehicleType' + vehicleIndex).val('');
+                            }
+
+                            loader.addClass('hidden');
+                            input.attr('disabled', false);
+                        },
+                        done: function (data) {
+                            loader.addClass('hidden');
+                            input.attr('disabled', false);
+                        }
+                    });
+                }
+            }
+
+            $('#checkPrices').on('click', function (e) {
+                var params = new Object();
+                params['num_vehicles'] = 0;
+                params['ozip'] = ($('#originZip').val() != '') ? $('#originZip').val() : $('#originCity').val() + ',' + $('#originState').val();
+                params['dzip'] = ($('#destinationZip').val() != '') ? $('#destinationZip').val() : $('#destinationCity').val() + ',' + $('#destinationState').val();
+                var numVehicles = 0;
+                $('.vehicleQty', '.vehicles').each(function (i, e) {
+                    var strQty = $(this).val(), tmpQty = $.trim(strQty).length == 0 || isNaN(strQty) ? 1 : parseInt(strQty);
+                    numVehicles += tmpQty <= 0 ? 1 : tmpQty;
+                });
+                params['num_vehicles'] = numVehicles;
+                params['enclosed'] = $('#selTrailerType').val() == 'Enclosed' ? 1 : 0;
+                params['inop'] = $('.runningRadio:checked').val() == 1 ? 0 : 1
+                params['vehicle_types'] = $('.vehicleType:visible').first().val() ? $('.vehicleType:visible').first().val() : '+';
+                params['miles'] = 0;
+
+                var b_t = $('#b_t').val();
+
+                if (b_t.length) {
+                    var bt_parts = b_t.split('=');
+
+                    params[bt_parts[0]] = bt_parts[1];
+                }
+
+                var invalid = false;
+                var el = $('<p>', {
+                    class: 'alert alert-info',
+                });
+                if ($('#selTrailerType').val().match(/driveaway/i)) {
+                    el.append('The Sample Prices feature is not supported with "Driveaway" trailer types.<br/>');
+                }
+                if ($('#originValid').val() != 1 || $('#destinationValid').val() != 1) {
+                    el.append('Please enter valid U.S. locations.<br/>');
+                }
+                if ($('#selTrailerType').val() == '') {
+                    el.append('Please choose a trailer type.<br/>');
+                }
+                $('.samplePrices').removeClass('hidden').show();
+                if (el.html() != '') {
+                    el.addClass('alert-warning');
+                    el.prepend(' <b>Please correct the following and resubmit: </b><br/>');
+                    $('.samplePrices').html(el);
+                } else {
+                    var spinner = $('<span>').addClass('glyphicon glyphicon-refresh');
+                    el.addClass('alert-info');
+                    el.html(' <b>Loading</b>');
+                    el.prepend(spinner);
+                    $('.samplePrices').html(el);
+                    spin(spinner);
+                    spinTimer = setInterval(function () {
+                        spin(spinner);
+                    }, 2000);
+                    $.each(params, function (i, e) {
+                        if (!e) {
+                            submit = false;
+                        }
+                    })
+                    $.ajax({
+                        type: "GET",
+                        url: '/protected/cargo/sample-prices-lightbox',
+                        data: $.param(params),
+                        success: function (data) {
+                            $('.samplePrices').html(data);
+                            $('.samplePrices').find('table').addClass('table table-responsive')
+                        }
+                    });
+                }
+            });
+            $('.samplePrices').on('click', '.closeSamplePrices', function () {
+                $('.samplePrices').hide();
+            })
+
+            $('.postType').each(function (i, e) {
+                if ($(e).is(':checked')) {
+                   
+                    $(e).trigger('change');
+                }
+            });
+
+
+            // Since we might be going into a listing/dispatch sheet to edit it at a later date, show users if the date available field is already expired.
+            $(window).scrollTop(0);
+        });
+    </script>
+
+
+
+
+
 }
+
+
+

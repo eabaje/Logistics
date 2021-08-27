@@ -1,14 +1,7 @@
-﻿using Carrier.Application.CQRS.CompanyRW.Commands;
-using Carrier.Application.CQRS.LoginRW.Commands;
-using Carrier.Application.DTO;
-using Carrier.Application.Exceptions;
+﻿
 using Logistics.Service.API.Entities;
 using Logistics.Service.API.Repository.Interfaces;
-using Carrier.FirebaseServer.Repository;
 
-using Logistics.Service.API.Models;
-using Logistics.Service.API.ViewModels;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,161 +10,145 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Logistics.Shared.Models;
+using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Logistics.Service.API.Controllers
 {
     public class LoadController : Controller
     {
-        private readonly IMediator _mediator;
+
+        private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        private IUserService _IUserStore;
-        private ICompanyService _companyService;
-        private IConsignmentService _consignmentService;
-        private IFireBaseAuthService _authservice;
-        private readonly IJourneyService _journeyService;
-        //private FireBaseAuthService _authservice = new FireBaseAuthService();
+        private readonly ILogger<LoadController> _logger;
+        private IConsignmentRepository _repository;
 
-
-        public LoadController(ICompanyService companyService,IConfiguration config, IUserService IUserStore, IConsignmentService consignmentService, IFireBaseAuthService authservice)
+        //private readonly VehicleRepository _vehicleRepository;
+        public LoadController(IConfiguration config, IConsignmentRepository repository, ILogger<LoadController> logger, IMapper mapper)
         {
-            if (IUserStore == null)
-                throw new ArgumentNullException(nameof(IUserStore));
-            _IUserStore = IUserStore;
-            _consignmentService = consignmentService;
-            _authservice = authservice;
+
+            _repository = repository;
+            _mapper = mapper;
             _config = config;
-            _companyService = companyService;
 
-        }
-       
-
-     
-        public async Task<IActionResult> Index()
-        {
-            var entity = await _consignmentService.GetAllConsignments();
-
-            var model = entity
-               .Select(a => new ConsignmentDTO
-               {
-                   LoadId = a.LoadId,
-                   LoadDate = a.LoadDate ,
-                   LoadCategory = a.LoadCategory,
-                   LoadType = a.LoadType,
-                   LoadWeight = a.LoadWeight, // Remove
-                   LoadUnit = a.LoadUnit,
-                   CompanyId = Guid.Parse(a.CompanyId),
-                   Description = a.Description
-               }).ToList();
-
-          
-
-            return View(model);
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
 
-        public async Task<IActionResult> AddLoad()
-        {
-            //get list of carrier companies and load to select list
-            var entity = await _companyService.GetCompanyByCategory("carrier");
 
-            List<SelectListItem> Category = entity
-                   .OrderBy(n => n.CompanyId)
-                       .Select(n =>
-                       new SelectListItem
-                       {
-                           Value = n.CompanyId.ToString(),
-                           Text = n.CompanyName
-                       }).ToList();
-
-
-           
-
-
-            ViewBag.CategoryList = Category;
-
-            return View();
-        }
+      
 
 
         [HttpGet]
-        [Route("Load/GetConsignmentDetail/{LoadId}")]
-        public async Task<IActionResult> GetConsignmentDetail(Guid LoadId)
+        [Route("Consignment/{ConsignmentId}")]
+        public async Task<IActionResult> GetConsignment(string ConsignmentId)
         {
-            var entity = await _consignmentService.GetConsignmentById(LoadId.ToString());
-
-            if (entity == null)
+            try
             {
-                throw new NotFoundException(nameof(ConsignmentDTO), LoadId);
+                var entity = await _repository.GetItemAsync(ConsignmentId);
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(entity);
             }
-
-            return View(new ConsignmentDTO
+            catch (Exception)
             {
-                CompanyId = Guid.Parse(entity.CompanyId),
-                LoadCategory = entity.LoadCategory ?? string.Empty,
-                LoadType = entity.LoadType ?? string.Empty,
-                LoadUnit = entity.LoadUnit ,
-                LoadWeight = entity.LoadWeight ,
-                Description = entity.Description ?? string.Empty,
-               
-
-            });
-
-
-
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
 
         }
 
-        //[HttpGet]
-        //[Route("Load/")]
-        //public async Task<IActionResult> GetConsignmentList()
-        //{
-        //    var entity = await _consignmentService.GetAllConsignments();
-
-        //    if (entity == null)
-        //    {
-        //        throw new NotFoundException(nameof(ConsignmentDTO), null);
-        //    }
-
-
-        //    return View(entity);
-        //}
-
-        [HttpPost]
-    //    [Route("Load/AddLoad")]
-       
-        public async Task<IActionResult> AddLoad(Consignment command)
+        [HttpGet]
+        // [Route("Consignment/GetFreightConsignmentByDate/{ConsignmentId}")]
+        public async Task<ActionResult<IEnumerable<ConsignmentDTO>>> GetFreightConsignmentByDate([FromBody] string fromdate, string todate, string ConsignmentId)
         {
-            bool result = await _consignmentService.AddConsignment(command);
-
-            //var result = await _mediator.Send(command);
-            if (result)
+            try
             {
+                var entity = await _repository.GetConsignmentByDate(Convert.ToDateTime(fromdate), Convert.ToDateTime(todate), ConsignmentId);
 
-                return View(new ResultMsg { Msg = "Added New Load Entry  " });
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
-
+                return Ok(_mapper.Map<List<ConsignmentDTO>>(entity));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
             }
 
-            else { return NotFound(); }
+        }
+
+        [HttpGet]
+        [Route("Consignment/")]
+        public async Task<IActionResult> GetConsignmentList()
+        {
+            try
+            {
+                var entity = await _repository.GetItemsAsync();
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
 
 
+
         [HttpPost]
-      //  [Route("Consignment/DeleteConsignment")]
-        public async Task<IActionResult> DeleteConsignment(string command)
+        // [Route("Consignment/AddDriver")]
+        public async Task<IActionResult> AddConsignment([FromBody]ConsignmentDTO Consignmentdto)
         {
-            bool result = await _consignmentService.DeleteConsignment(command);
-
-            //var result = await _mediator.Send(command);
-            if (result)
+            try
             {
+                var entity = await _repository.AddItemAsync(_mapper.Map<Consignment>(Consignmentdto));
 
-                return View(new ResultMsg { Msg = "Record Deleted " });
 
 
+                return Ok(entity);
             }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+        }
 
-            else { return NotFound(); }
+
+
+        [HttpPut]
+        // [Route("Consignment/AddDriver")]
+        public async Task<IActionResult> UpdateConsignment([FromBody] ConsignmentDTO Consignmentdto)
+        {
+            try
+            {
+                var entity = await _repository.UpdateItemAsync(_mapper.Map<Consignment>(Consignmentdto));
+
+
+
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
     }
 }

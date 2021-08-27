@@ -10,7 +10,7 @@ namespace Logistics.Service.API.Repository.Interfaces
     public interface IShipperRepository : IDataStore<Shipper>
     {
 
-        Task<IEnumerable<Shipper>> GetShipperByName(string shipperName);
+      //  Task<IEnumerable<Shipper>> GetShipperByName(string shipperName);
         Task<IEnumerable<Shipper>> GetShipperHistoryByDate(DateTime fromDate, DateTime ToDate, string shipperId);
 
     }

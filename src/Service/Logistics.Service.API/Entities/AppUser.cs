@@ -12,14 +12,14 @@ namespace Logistics.Service.API.Entities
         public string Othernames { get; set; }      
         public string Company { get; set; }
         public string Category { get; set; }
-        public string FullName
-        {
-            get
-            {
-                return LastName + ", " + Othernames;
-            }
-        }
-
+        //public string FullName
+        //{
+        //    get
+        //    {
+        //        return LastName + ", " + Othernames;
+        //    }
+        //}
+        public string FullName { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public DateTime? RegistrationDate { get; set; }
         public DateTime? LastLockedDate { get; set; }

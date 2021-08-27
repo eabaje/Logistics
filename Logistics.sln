@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistics.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistics.Persistence", "src\Infrastructure\Logistics.Persistence\Logistics.Persistence.csproj", "{C36B7519-CBB2-4CB1-8757-7441C85987AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logistics.AdminUI", "src\Presentation\Logistics.AdminUI\Logistics.AdminUI.csproj", "{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logistics.AdminUI", "src\Presentation\Logistics.AdminUI\Logistics.AdminUI.csproj", "{A6A728BC-094E-4EE2-8CD1-B032E6B09F3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

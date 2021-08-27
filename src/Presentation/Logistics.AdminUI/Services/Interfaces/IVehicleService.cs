@@ -9,13 +9,16 @@ namespace Logistics.AdminUI.Services.Interfaces
     public interface IVehicleService
     {
 
-        public Task<IEnumerable<CustomerDTO>> GetCustomers();
-        public Task<CustomerDTO> GetCustomerById(string Id);
-        public Task<IEnumerable<CustomerDTO>> GetCustomersByDate(string fromdDateRange, string toDateRange);
+        public Task<IEnumerable<VehicleDTO>> GetVehicles();
+        public Task<VehicleDTO> GetVehicleById(string Id);
 
-        public Task<SuccessModel> AddCustomer(CustomerDTO bookingDTO);
+        public Task<IEnumerable<VehicleDTO>> GetVehiclesByCarrier(string carrierId);
+        public Task<VehicleDTO> GetVehicleByCarrier(string carrierId);
+        public Task<IEnumerable<VehicleDTO>> GetVehiclesByDate(string fromdDateRange, string toDateRange);
 
-        public Task<SuccessModel> UpdateCustomer(CustomerDTO bookingDTO);
+        public Task<SuccessModel> AddVehicle(VehicleDTO bookingDTO);
+
+        public Task<SuccessModel> UpdateVehicle(VehicleDTO bookingDTO);
 
        
 

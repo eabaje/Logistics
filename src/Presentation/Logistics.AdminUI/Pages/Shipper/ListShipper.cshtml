@@ -1,4 +1,139 @@
-﻿@page
+﻿@page "/shipper/my-vehicles"
 @model Logistics.AdminUI.Pages.Shipper.ListShipperModel
 @{
 }
+
+<div class="col-lg-12">
+
+    <div class="card">
+        <div class="card-header">
+            <h3 id="formTitle">
+                My Vehicles
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="container">
+
+               
+
+                <ul class="nav nav-tabs hidden-xs hidden-sm">
+                    <li role="presentation" class="inline-heading active"><a href="?folder=Listed+on+CD">Listed <span class="badge">0</span></a></li>
+                    <li role="presentation" class="inline-heading"><a href="?folder=Not+Signed">Not Signed <span class="badge">0</span></a></li>
+                    <li role="presentation" class="inline-heading"><a href="?folder=Dispatched">Dispatched <span class="badge">0</span></a></li>
+                    <li role="presentation" class="inline-heading"><a href="?folder=Picked-Up">Picked-Up <span class="badge">0</span></a></li>
+                    <li role="presentation" class="inline-heading"><a href="?folder=Delivered">Delivered <span class="badge">0</span></a></li>
+                    <li role="presentation" class="inline-heading"><a href="?folder=Cancelled">Cancelled <span class="badge">0</span></a></li>
+                    <li role="presentation" class="inline-heading"><a href="?folder=Archived">Archived <span class="badge">0</span></a></li>
+                </ul>
+
+                <select id="navSelect" class="form-control visible-xs visible-sm" onchange="changeFolder()">
+                    <option value="?folder=Listed+on+CD" selected="selected">Listed (0)</option>
+                    <option value="?folder=Not+Signed">Not Signed (0)</option>
+                    <option value="?folder=Dispatched">Dispatched (0)</option>
+                    <option value="?folder=Picked-Up">Picked-Up (0)</option>
+                    <option value="?folder=Delivered">Delivered (0)</option>
+                    <option value="?folder=Cancelled">Cancelled (0)</option>
+                    <option value="?folder=Archived">Archived (0)</option>
+                </select>
+
+
+                <br>
+
+
+
+
+                <input type="hidden" id="hasDupAlertDispatchPopup" value="" />
+                <input type="hidden" id="upgradeTier" value="0" />
+
+                <p>These vehicles are listed on Central Dispatch and are not yet assigned to a carrier. Once you have found a carrier to move your vehicle, your next step is to "Assign" it to them so that they can sign your dispatch sheet and contract. If you don't see your vehicle listed here, you must first create it using <a href="/protected/listing/post-listing">Post a Vehicle</a>.</p>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-7 col-sm-8 margin-bottom-10">
+                        <form id="searchForm" class="form-inline">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Search<span class="hidden-sm"> for</span></label>
+                                <select name="searchIn" class="form-control">
+                                    <option value="origination_city">Pickup City</option>
+                                    <option value="origination_state">Pickup State</option>
+                                    <option value="destination_city">Delivery City</option>
+                                    <option value="destination_state">Delivery State</option>
+                                    <option value="order_id">Order ID</option>
+                                    <option value="vehicle_make">Vehicles</option>
+                                    <option value="carrier_company">Carrier Name</option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="searchText" name="search">
+                            </div>
+
+                            <button id="table-search-submit" class="btn btn-primary">Go</button>
+                            <input type="hidden" name="folder" value="Results">
+                            <input type="hidden" id="CSRFToken" name="CSRFToken" value="37dae2d3c29cb355e49b9a10dd895ff13422d0d4209093070ecf31679e5be766" />
+                        </form>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <p class="lead text-center">No Records Found</p>
+
+                <div id="confirmationLightbox"></div>
+                <div id="confirmModal" class="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button class="close" data-dismiss="modal">&times;</button>
+                                <h3>What would you like to do?</h3>
+                            </div>
+                            <div class="modal-body">
+
+                            </div>
+                            <div class="modal-footer">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="confirmEditModal" class="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title">Reset Offers</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <p>All offers on this listing will be reset. Are you sure you want to make this edit?</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                                <button id="btnEdit" type="button" class="btn btn-primary">YES</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loadingModal" class="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="/images/spinner.gif"> &nbsp; Please wait... </img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

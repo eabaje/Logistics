@@ -9,40 +9,40 @@ using System.Threading.Tasks;
 
 namespace Logistics.AdminUI.Services
 {
-    public class ShipperService : IPriceListService
+    public class ShipperService : IShipperService
     {
         private readonly HttpClient _client;
         public ShipperService(HttpClient client)
         {
             _client = client;
         }
-        public async Task<PriceListDTO> GetPriceListBySalonServiceType(string ServiceTypeId, string salonId)
+        public async Task<ShipperDTO> GetShipperBySalonServiceType(string ServiceTypeId, string salonId)
         {
-            var response = await _client.GetAsync($"api/PriceList/GetPriceListByServiceType/?ServiceTypeId={ServiceTypeId}&SalonId={salonId}");
+            var response = await _client.GetAsync($"api/Shipper/GetShipperByServiceType/?ServiceTypeId={ServiceTypeId}&SalonId={salonId}");
             var content = await response.Content.ReadAsStringAsync();
-            var services = JsonConvert.DeserializeObject<PriceListDTO>(content);
+            var services = JsonConvert.DeserializeObject<ShipperDTO>(content);
             return services;
         }
 
-        public Task<PriceListDTO> GetPriceListBySalonServiceType(string SerrviceTypeId)
+        public Task<ShipperDTO> GetShipperBySalonServiceType(string SerrviceTypeId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PriceListDTO> GetPriceListByServiceType(string ServiceTypeId, string salonId)
+        public async Task<ShipperDTO> GetShipperByServiceType(string ServiceTypeId, string salonId)
         {
-            var response = await _client.GetAsync($"api/PriceList/GetPriceListByServiceType/?ServiceTypeId={ServiceTypeId}&SalonId={salonId}");
+            var response = await _client.GetAsync($"api/Shipper/GetShipperByServiceType/?ServiceTypeId={ServiceTypeId}&SalonId={salonId}");
             var content = await response.Content.ReadAsStringAsync();
-            var services = JsonConvert.DeserializeObject<PriceListDTO>(content);
+            var services = JsonConvert.DeserializeObject<ShipperDTO>(content);
             return services;
         }
 
-        //public Task<IEnumerable<PriceListDTO>> GetPriceLists()
+        //public Task<IEnumerable<ShipperDTO>> GetShippers()
         //{
         //    throw new NotImplementedException();
         //}
 
-        //public Task<IEnumerable<PriceListDTO>> GetPriceListsByServiceType()
+        //public Task<IEnumerable<ShipperDTO>> GetShippersByServiceType()
         //{
         //    throw new NotImplementedException();
         //}

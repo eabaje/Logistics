@@ -116,6 +116,23 @@ namespace Logistics.Service.API.Repository
         }
     }
 
+        public async Task<IEnumerable<VehicleDriver>> GetDriverHistoryByDate(DateTime fromDate, DateTime ToDate, string driverId)
+        {
+            List<VehicleDriver> CarrierList = new List<VehicleDriver>();
+
+            return CarrierList = (string.IsNullOrEmpty(driverId)) ? await _context
+                       .Drivers
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate)
+                       .ToListAsync()
+                       : await _context
+                       .Drivers
+                       .Where(p => p.CreatedOn >= fromDate && p.CreatedOn <= ToDate && p.CompanyId == int.Parse(driverId))
+                       .ToListAsync();
+        }
+
+
+
+
         public async Task<IEnumerable<VehicleDriver>> GetDriverByName(string name)
         {
             try

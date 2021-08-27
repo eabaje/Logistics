@@ -7,11 +7,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Salon.Common;
+
 
 namespace Logistics.AdminUI.Services
 {
-    public class BrokerService : IBookingService
+    public class BrokerService : IBrokerService
     {
 
         private readonly HttpClient _client;
@@ -21,15 +21,15 @@ namespace Logistics.AdminUI.Services
             _client = client;
         }
 
-        public async Task<BookingDTO> AddBooking(BookingDTO bookingDTO)
+        public async Task<BrokerDTO> AddBroker(BrokerDTO BrokerDTO)
         {
-            var content = JsonConvert.SerializeObject(bookingDTO);
+            var content = JsonConvert.SerializeObject(BrokerDTO);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("api/Booking/AddBooking", bodyContent);
+            var response = await _client.PostAsync("api/Broker/AddBroker", bodyContent);
             if (response.IsSuccessStatusCode)
             {
                 var contentTemp = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<BookingDTO>(contentTemp);
+                var result = JsonConvert.DeserializeObject<BrokerDTO>(contentTemp);
                 return result;
             }
             else
@@ -50,11 +50,11 @@ namespace Logistics.AdminUI.Services
             //    return new SuccessModel { SuccessMessage = "Failed" };
             //}
         }
-        public async Task<SuccessModel> UpdateBooking(BookingDTO bookingDTO)
+        public async Task<SuccessModel> UpdateBroker(BrokerDTO BrokerDTO)
         {
-            var content = JsonConvert.SerializeObject(bookingDTO);
+            var content = JsonConvert.SerializeObject(BrokerDTO);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync("api/Booking/UpdateBooking", bodyContent);
+            var response = await _client.PutAsync("api/Broker/UpdateBroker", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -72,11 +72,11 @@ namespace Logistics.AdminUI.Services
         }
         public async Task Delete(string Id)
         {
-            var response = await _client.GetAsync($"api/Booking/GetBooking/{Id}");
+            var response = await _client.GetAsync($"api/Broker/GetBroker/{Id}");
 
             if (response.IsSuccessStatusCode)
             {
-                var delete = await _client.DeleteAsync($"api/Booking/Delete/{Id}");
+                var delete = await _client.DeleteAsync($"api/Broker/Delete/{Id}");
                 //  return delete;
             }
             else
@@ -90,30 +90,30 @@ namespace Logistics.AdminUI.Services
 
         }
 
-        public async Task<BookingDTO> GetBookingById(string Id)
+        public async Task<BrokerDTO> GetBrokerById(string Id)
         {
-            var response = await _client.GetAsync($"api/Booking/GetBooking/{Id}");
+            var response = await _client.GetAsync($"api/Broker/GetBroker/{Id}");
             var content = await response.Content.ReadAsStringAsync();
-            var booking = JsonConvert.DeserializeObject<BookingDTO>(content);
-            return booking;
+            var Broker = JsonConvert.DeserializeObject<BrokerDTO>(content);
+            return Broker;
         }
 
-        public async Task<IEnumerable<BookingDTO>> GetBookings()
+        public async Task<IEnumerable<BrokerDTO>> GetBrokers()
         {
-            var response = await _client.GetAsync($"api/Booking/GetBookings");
+            var response = await _client.GetAsync($"api/Broker/GetBrokers");
             var content = await response.Content.ReadAsStringAsync();
-            var bookings = JsonConvert.DeserializeObject<IEnumerable<BookingDTO>>(content);
-            return bookings;
+            var Brokers = JsonConvert.DeserializeObject<IEnumerable<BrokerDTO>>(content);
+            return Brokers;
         }
 
-        public async Task<IEnumerable<BookingDTO>> GetBookingsByDate(string fromdDateRange, string toDateRange)
+        public async Task<IEnumerable<BrokerDTO>> GetBrokersByDate(string fromdDateRange, string toDateRange)
         {
-            var response = await _client.GetAsync($"api/Booking/GetBookingsByDate/?fromdDateRange={fromdDateRange}&toDateRange={toDateRange}");
+            var response = await _client.GetAsync($"api/Broker/GetBrokersByDate/?fromdDateRange={fromdDateRange}&toDateRange={toDateRange}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var bookings = JsonConvert.DeserializeObject<IEnumerable<BookingDTO>>(content);
-                return bookings;
+                var Brokers = JsonConvert.DeserializeObject<IEnumerable<BrokerDTO>>(content);
+                return Brokers;
             }
             else
             {
@@ -123,24 +123,24 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public  async Task<SuccessModel> UpdateBookingStatus(string BookId, BookStatus bookingDTO)
+        public  async Task<SuccessModel> UpdateBrokerStatus(string BrokerId, BrokerDTO BrokerDTO)
         {
-            var response = await _client.GetAsync($"api/Booking/GetBooking/{BookId}");
+            var response = await _client.GetAsync($"api/Broker/GetBroker/{BrokerId}");
 
            
 
 
-        string json = @"[ { 'BookId': '" + BookId + "', 'BookStatus': '" + bookingDTO + "'     } ]";
+        string json = @"[ { 'BrokerId': '" +BrokerId + "', 'BrokerStatus': '" + BrokerDTO + "'     } ]";
 
 
 
 
-        int i = (int)bookingDTO;
+        //int i = (int)BrokerDTO;
             if (response.IsSuccessStatusCode)
             {
                 var content = JsonConvert.SerializeObject(json);
                 var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-                var response1 = await _client.PostAsync("api/Booking/UpdateBookingStatus/", bodyContent);
+                var response1 = await _client.PostAsync("api/Broker/UpdateBrokerStatus/", bodyContent);
 
                 var contentTemp = await response1.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<SuccessModel>(contentTemp);

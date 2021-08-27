@@ -9,8 +9,10 @@ namespace Logistics.Service.API.Entities
 
         public long Id { get; set; }
         public DateTime DateTime { get; set; }
+
+        public DateTime AuditDate { get; set; }
         public String Username { get; set; }
-       
+        
         public String TableName { get; set; }
        
         public String Action { get; set; }

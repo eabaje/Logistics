@@ -13,6 +13,8 @@ namespace Logistics.Service.API.Repository.Interfaces
         Task<IEnumerable<VehicleDriver>> GetDriverByName(string DriverName);
         Task<IEnumerable<VehicleDriver>> GetDriverByCarrier(string CompanyId);
         Task<IEnumerable<VehicleDriver>> GetAllDrivers();
+
+        Task<IEnumerable<VehicleDriver>> GetDriverHistoryByDate(DateTime fromDate, DateTime ToDate, string driverId);
         Task<bool> AddDriver(VehicleDriver item);
         Task<bool> UpdateDriver(VehicleDriver item);
         Task<VehicleDriver> GetDriverById(string id);

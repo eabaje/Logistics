@@ -1,8 +1,14 @@
 ﻿
+using AutoMapper;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Repository.Interfaces;
+using Logistics.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,159 +18,157 @@ namespace Logistics.Service.API.Controllers
 {
     public class DriverController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        private IUserService _IUserStore;
-        private IDriverService _driverService;
-        private IFireBaseAuthService _authservice;
-        private ICompanyService _companyService;
+        private readonly ILogger<DriverController> _logger;
+        private IDriverRepository _repository;
 
         //private FireBaseAPageWebHelper helper = new PageWebHelper();uthService _authservice = new FireBaseAuthService();
-        
 
-        public DriverController(ICompanyService companyService, IConfiguration config, IUserService IUserStore, IDriverService DriverStore, IFireBaseAuthService authservice)
+
+        public DriverController(IConfiguration config, IDriverRepository repository, ILogger<DriverController> logger, IMapper mapper)
         {
-            if (IUserStore == null)
-                throw new ArgumentNullException(nameof(IUserStore));
-            _IUserStore = IUserStore;
-            _driverService = DriverStore;
-            _authservice = authservice;
+
+            _repository = repository;
+            _mapper = mapper;
             _config = config;
-            _companyService = companyService;
 
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-       
 
 
-       
-        public async Task<IActionResult> Index()
+
+
+        [HttpGet]
+        [Route("Driver/{DriverId}")]
+        public async Task<IActionResult> GetDriver(string DriverId)
         {
-            var entity = await _companyService.GetCompanyByCategory("carrier");
+            try
+            {
+                var entity = await _repository.GetDriverById(DriverId);
 
-            List<SelectListItem> Category = entity
-                   .OrderBy(n => n.CompanyId)
-                       .Select(n =>
-                       new SelectListItem
-                       {
-                           Value = n.CompanyId.ToString(),
-                           Text = n.CompanyName
-                       }).ToList();
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
 
-
-
-
-            ViewBag.CategoryList = Category;
-            return View();
         }
 
         [HttpGet]
-        [Route("Driver/GetDriver/{DriverId}")]
-        public async Task<IActionResult> GetDriver(string DriverId)
+      //  [Route("Driver/{DriverId}")]
+        public async Task<IActionResult> GetDriverByName(string driverName)
         {
-            var entity = await _driverService.GetItemAsync(DriverId.ToString());
-
-            if (entity == null)
+            try
             {
-                throw new NotFoundException(nameof(DriverDTO), DriverId);
+                var entity = await _repository.GetDriverByName(driverName);
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
             }
 
-            return View(new DriverDTO
+        }
+        [HttpGet]
+        // [Route("Driver/GetFreightDriverByDate/{DriverId}")]
+        public async Task<ActionResult<IEnumerable<DriverDTO>>> GetDriverHistoryByDate([FromBody] string fromdate, string todate, string DriverId)
+        {
+            try
             {
-                DriverId = entity.DriverId,
-                DriverName = entity.DriverName ?? string.Empty,
-                DriverLicense = entity.DriverLicense ?? string.Empty,
-                Phone = entity.Phone ?? string.Empty,
-                Email = entity.Email ?? string.Empty,
-                City = entity.City ?? string.Empty,
-                Address = entity.Address ?? string.Empty,
-                Company = entity.CompanyId.ToString() ?? string.Empty,
-                Country = entity.Country ?? string.Empty,
-                Picture = entity.PicturePath ?? string.Empty,
-            });
+                var entity = await _repository.GetDriverHistoryByDate(Convert.ToDateTime(fromdate), Convert.ToDateTime(todate), DriverId);
 
+                if (entity == null)
+                {
+                    return NotFound();
+                }
 
-         
+                return Ok(_mapper.Map<List<DriverDTO>>(entity));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+
         }
 
         [HttpGet]
         [Route("Driver/")]
         public async Task<IActionResult> GetDriverList()
         {
-            var entity = await _driverService.GetAllDrivers();
-
-
-            if (entity == null)
+            try
             {
-                return NotFound();
+                var entity = await _repository.GetAllDrivers();
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(entity);
             }
-
-
-            return View(entity);
-
-            
-        }
-
-        public async Task<IActionResult> AddDriver()
-        {
-         
-
-              ViewBag.CompanyList =  await Helper.PageWebHelper.Instance.GetCompany("carrier",_companyService);
-
-            return View();
-
-          
-        }
-
-        [HttpPost]
-        [Route("Driver/AddDriver")]
-        public async Task<IActionResult> AddDriver(VehicleDriver command)
-        {
-            bool result = await _driverService.AddDriver(command);
-
-            //var result = await _mediator.Send(command);
-            if (result)
+            catch (Exception)
             {
-
-                return View(new ResultMsg { Msg = "Added New Driver Info " });
-
-                //Login Info Mail sent to driver 
-
-
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
             }
-
-            else { return NotFound(); }
-
-           
         }
+
 
 
         [HttpPost]
-        [Route("Driver/DeleteDriver")]
-        public async Task<IActionResult> DeleteDriver(string command)
+        // [Route("Driver/AddDriver")]
+        public async Task<IActionResult> AddDriverProfile([FromBody] DriverDTO Driverdto)
         {
-            bool result = await _driverService.DeleteDriver(command);
-
-            //var result = await _mediator.Send(command);
-            if (result)
+            try
             {
+                var entity = await _repository.AddDriver(_mapper.Map<VehicleDriver>(Driverdto));
 
-                return View(new ResultMsg { Msg = "Record Deleted " });
 
 
+                return Ok(entity);
             }
-
-            else { return NotFound(); }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
 
 
 
-        public IActionResult AssignVehicle()
+        [HttpPut]
+        // [Route("Driver/AddDriver")]
+        public async Task<IActionResult> UpdateDriverProfile([FromBody] DriverDTO Driverdto)
         {
-            ViewBag.CompanyList = Helper.PageWebHelper.Instance.GetCompany("carrier",_companyService);
+            try
+            {
+                var entity = await _repository.UpdateDriver(_mapper.Map<VehicleDriver>(Driverdto));
 
-            return View();
 
 
+                return Ok(entity);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
         }
     }
 }

@@ -80,10 +80,10 @@ namespace Logistics.Service.API.Repository
             return ShipperList.Where(query);
         }
 
-        public async Task<IEnumerable<Shipper>> GetShipperByName(string shipperName)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<Shipper>> GetShipperByName(string shipperName)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<IEnumerable<Shipper>> GetShipperHistoryByDate(DateTime fromDate, DateTime ToDate, string shipperId)
         {

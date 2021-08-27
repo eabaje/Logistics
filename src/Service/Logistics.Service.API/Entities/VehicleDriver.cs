@@ -6,11 +6,13 @@ using System.Text;
 
 namespace Logistics.Service.API.Entities
 {
-   public class VehicleDriver
+   public class VehicleDriver:BaseEntity
     {
 
         [Key]
         public int DriverId { get; set; }
+
+        public override int EntityId => DriverId;
         public string DriverName { get; set; }
         public string DriverLicense { get; set; }
         public string Address { get; set; }

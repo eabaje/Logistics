@@ -15,7 +15,7 @@ namespace Logistics.Repository.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : Controller
+    public class CompanyController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Logistics.AdminUI.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace Logistics.AdminUI.Helper
     public   class PageWebHelper
     {
        // private static IUserService _IUserStore;
-        private static IDriverRepository _driverService;
+     //   private static IDriverService _driverService;
         static PageWebHelper _instance;
-        private static IVehicleRepository _vehicleService;
-        private static IFireBaseAuthService _authservice;
-        private static ICompanyRepository _companyService;
+        private static IVehicleService _vehicleService;
+       
+        private static ICompanyService _companyService;
 
         public static PageWebHelper Instance
         {
@@ -53,23 +54,23 @@ namespace Logistics.AdminUI.Helper
             return Company;
         }
 
-        public  async Task<List<SelectListItem>> GetDriversByCompany(string Companyid, IDriverService DriverStore)
+        //public  async Task<List<SelectListItem>> GetDriversByCompany(string Companyid, IDriverService DriverStore)
 
-        {
-            _driverService = DriverStore;
-            var entity = await _driverService.GetDriverByCarrier(Companyid);
+        //{
+        //    _driverService = DriverStore;
+        //    var entity = await _driverService.GetDriverByCarrier(Companyid);
 
-            List<SelectListItem> DriverList = entity
-                   .OrderBy(n => n.CompanyId)
-                       .Select(n =>
-                       new SelectListItem
-                       {
-                           Value = n.DriverId.ToString(),
-                           Text = n.DriverName
-                       }).ToList();
+        //    List<SelectListItem> DriverList = entity
+        //           .OrderBy(n => n.CompanyId)
+        //               .Select(n =>
+        //               new SelectListItem
+        //               {
+        //                   Value = n.DriverId.ToString(),
+        //                   Text = n.DriverName
+        //               }).ToList();
           
-            return DriverList;
-        }
+        //    return DriverList;
+        //}
 
 
 
@@ -77,7 +78,7 @@ namespace Logistics.AdminUI.Helper
 
         {
             _vehicleService = vehicleService;
-            var entity = await _vehicleService.GetVehicleByCarrier(Companyid);
+            var entity = await _vehicleService.GetVehiclesByCarrier(Companyid);
 
             List<SelectListItem> VehicleList = entity
                    .OrderBy(n => n.VehicleModel)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Logistics.AdminUI.Services
 {
-    public class CarrierService : IBeautySalonService
+    public class CarrierService : ICarrierService
     {
 
         private readonly HttpClient _client;
@@ -19,11 +19,11 @@ namespace Logistics.AdminUI.Services
         {
             _client = client;
         }
-        public  async Task<SuccessModel> AddBeautySalon(BeautySalonDTO beautySalonDTO)
+        public  async Task<SuccessModel> AddCarrier(CarrierDTO CarrierDTO)
         {
-            var content = JsonConvert.SerializeObject(beautySalonDTO);
+            var content = JsonConvert.SerializeObject(CarrierDTO);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("api/BeautySalon/AddBeautySalon", bodyContent);
+            var response = await _client.PostAsync("api/Carrier/AddCarrier", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -39,11 +39,11 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public  async Task<SuccessModel> UpdateBeautySalon(BeautySalonDTO beautySalonDTO)
+        public  async Task<SuccessModel> UpdateCarrier(CarrierDTO CarrierDTO)
         {
-            var content = JsonConvert.SerializeObject(beautySalonDTO);
+            var content = JsonConvert.SerializeObject(CarrierDTO);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync("api/BeautySalon/UpdateBeautySalon", bodyContent);
+            var response = await _client.PutAsync("api/Carrier/UpdateCarrier", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -61,11 +61,11 @@ namespace Logistics.AdminUI.Services
 
         public  async Task Delete(string Id)
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalon/{Id}");
+            var response = await _client.GetAsync($"api/Carrier/GetCarrier/{Id}");
 
             if (response.IsSuccessStatusCode)
             {
-                var delete = await _client.DeleteAsync($"api/BeautySalon/Delete/{Id}");
+                var delete = await _client.DeleteAsync($"api/Carrier/Delete/{Id}");
                 //  return delete;
             }
             else
@@ -78,21 +78,21 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public  async Task<IEnumerable<BeautySalonDTO>> GetBeautySalons()
+        public  async Task<IEnumerable<CarrierDTO>> GetCarriers()
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalons");
+            var response = await _client.GetAsync($"api/Carrier/GetCarriers");
             var content = await response.Content.ReadAsStringAsync();
-            var salons = JsonConvert.DeserializeObject<IEnumerable<BeautySalonDTO>>(content);
+            var salons = JsonConvert.DeserializeObject<IEnumerable<CarrierDTO>>(content);
             return salons;
         }
 
-        public  async Task<IEnumerable<BeautySalonDTO>> GetBeautySalonByDate(string fromdDateRange, string toDateRange)
+        public  async Task<IEnumerable<CarrierDTO>> GetCarrierByDate(string fromdDateRange, string toDateRange)
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalonsByDate/?fromdDateRange={fromdDateRange}&toDateRange={toDateRange}");
+            var response = await _client.GetAsync($"api/Carrier/GetCarriersByDate/?fromdDateRange={fromdDateRange}&toDateRange={toDateRange}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var salons = JsonConvert.DeserializeObject<IEnumerable<BeautySalonDTO>>(content);
+                var salons = JsonConvert.DeserializeObject<IEnumerable<CarrierDTO>>(content);
                 return salons;
             }
             else
@@ -103,47 +103,47 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public  async Task<BeautySalonDTO> GetBeautySalonById(string Id)
+        public  async Task<CarrierDTO> GetCarrierById(string Id)
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalonById/{Id}");
+            var response = await _client.GetAsync($"api/Carrier/GetCarrierById/{Id}");
             var content = await response.Content.ReadAsStringAsync();
-            var salons = JsonConvert.DeserializeObject<BeautySalonDTO>(content);
+            var salons = JsonConvert.DeserializeObject<CarrierDTO>(content);
             return salons;
         }
 
-        public  async Task<IEnumerable<BeautySalonDTO>> GetBeautySalonByLocation(string location)
+        public  async Task<IEnumerable<CarrierDTO>> GetCarrierByLocation(string location)
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalonsByLocation/{location}");
+            var response = await _client.GetAsync($"api/Carrier/GetCarriersByLocation/{location}");
             var content = await response.Content.ReadAsStringAsync();
-            var salons = JsonConvert.DeserializeObject<IEnumerable<BeautySalonDTO>>(content);
+            var salons = JsonConvert.DeserializeObject<IEnumerable<CarrierDTO>>(content);
             return salons;
         }
 
-        public async Task<IEnumerable<BeautySalonDTO>> GetBeautySalonByName(string name)
+        public async Task<IEnumerable<CarrierDTO>> GetCarrierByName(string name)
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalonsByName/{name}");
+            var response = await _client.GetAsync($"api/Carrier/GetCarriersByName/{name}");
             var content = await response.Content.ReadAsStringAsync();
-            var salons = JsonConvert.DeserializeObject<IEnumerable<BeautySalonDTO>>(content);
+            var salons = JsonConvert.DeserializeObject<IEnumerable<CarrierDTO>>(content);
             return salons;
         }
 
-        public async Task<IEnumerable<BeautySalonDTO>> GetBeautySalonLocationByServiceType(string servicetype)
+        public async Task<IEnumerable<CarrierDTO>> GetCarrierLocationByServiceType(string servicetype)
         {
-            var response = await _client.GetAsync($"api/BeautySalon/GetBeautySalonLocationByServiceType/{servicetype}");
+            var response = await _client.GetAsync($"api/Carrier/GetCarrierLocationByServiceType/{servicetype}");
             var content = await response.Content.ReadAsStringAsync();
-            var salons = JsonConvert.DeserializeObject<IEnumerable<BeautySalonDTO>>(content);
+            var salons = JsonConvert.DeserializeObject<IEnumerable<CarrierDTO>>(content);
             return salons;
         }
 
-        public async Task<SuccessModel> AddBeautySalonToServiceType(SalonServiceDTO salonservice)
+        public async Task<SuccessModel> AddCarrierToServiceType(CarrierDTO Carriere)
         {
 
 
 
 
-            var content = JsonConvert.SerializeObject(salonservice);
+            var content = JsonConvert.SerializeObject(Carriere);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("api/BeautySalon/AddBeautySalonToServiceType", bodyContent);
+            var response = await _client.PostAsync("api/Carrier/AddCarrierToServiceType", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -159,11 +159,11 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public async Task<SuccessModel> RemoveBeautySalonFromServiceType(SalonServiceDTO salonservice)
+        public async Task<SuccessModel> RemoveCarrierFromServiceType(CarrierDTO Carriere)
         {
-            var content = JsonConvert.SerializeObject(salonservice);
+            var content = JsonConvert.SerializeObject(Carriere);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("api/BeautySalon/RemoveBeautySalonFromServiceType", bodyContent);
+            var response = await _client.PostAsync("api/Carrier/RemoveCarrierFromServiceType", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -181,11 +181,11 @@ namespace Logistics.AdminUI.Services
 
 
 
-        public async Task<SuccessModel> UpdateBeautySalonFromServiceType(SalonServiceDTO salonservice)
+        public async Task<SuccessModel> UpdateCarrierFromServiceType(CarrierDTO Carriere)
         {
-            var content = JsonConvert.SerializeObject(salonservice);
+            var content = JsonConvert.SerializeObject(Carriere);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync("api/BeautySalon/UpdateBeautySalonFromServiceType", bodyContent);
+            var response = await _client.PutAsync("api/Carrier/UpdateCarrierFromServiceType", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {

@@ -1,5 +1,4 @@
-﻿using Salon.Common;
-using Logistics.Shared.Models;
+﻿using Logistics.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +11,17 @@ namespace Logistics.AdminUI.Services.Interfaces
     {
 
        
-            public Task<IEnumerable<BookingDTO>> GetBookings();
-            public Task<BookingDTO> GetBookingById(string Id);
-            public Task<IEnumerable<BookingDTO>> GetBookingsByDate(string fromdDateRange, string toDateRange);
+            public Task<IEnumerable<BrokerDTO>> GetBrokers();
+            public Task<BrokerDTO> GetBrokerById(string Id);
+            public Task<IEnumerable<BrokerDTO>> GetBrokersByDate(string fromdDateRange, string toDateRange);
 
-            public Task<BookingDTO> AddBooking(BookingDTO bookingDTO);
+            public Task<BrokerDTO> AddBroker(BrokerDTO BrokerDTO);
 
-             //  public Task<SuccessModel> AddBooking(BookingDTO bookingDTO);
+             //  public Task<SuccessModel> AddBroker(BrokerDTO BrokerDTO);
 
-           public Task<SuccessModel> UpdateBooking(BookingDTO bookingDTO);
+           public Task<SuccessModel> UpdateBroker(BrokerDTO BrokerDTO);
 
-            public Task<SuccessModel> UpdateBookingStatus(string BookId,BookStatus bookingDTO);
+            public Task<SuccessModel> UpdateBrokerStatus(string BookId, BrokerDTO BrokerDTO);
 
             public Task Delete(string Id);
 

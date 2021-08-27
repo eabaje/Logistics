@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace Logistics.AdminUI.Services
 {
-    public class CustomerService : ICustomerService
+    public class CompanyService : ICompanyService
     {
         private readonly HttpClient _client;
 
-        public CustomerService(HttpClient client)
+        public CompanyService(HttpClient client)
         {
             _client = client;
         }
-        public async Task<SuccessModel> AddCustomer(CustomerDTO customerDTO)
+        public async Task<SuccessModel> AddCompany(CompanyDTO CompanyDTO)
         {
-            var content = JsonConvert.SerializeObject(customerDTO);
+            var content = JsonConvert.SerializeObject(CompanyDTO);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("api/Customer/AddCustomer", bodyContent);
+            var response = await _client.PostAsync("api/Company/AddCompany", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -40,11 +40,11 @@ namespace Logistics.AdminUI.Services
 
         public async Task Delete(string Id)
         {
-            var response = await _client.GetAsync($"api/Customer/GetCustomer/{Id}");
+            var response = await _client.GetAsync($"api/Company/GetCompany/{Id}");
 
             if (response.IsSuccessStatusCode)
             {
-                var delete = await _client.DeleteAsync($"api/Customer/Delete/{Id}");
+                var delete = await _client.DeleteAsync($"api/Company/Delete/{Id}");
                 //  return delete;
             }
             else
@@ -57,30 +57,55 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public async Task<CustomerDTO> GetCustomerById(string Id)
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByCategory(string name)
         {
-            var response = await _client.GetAsync($"api/Customer/GetCustomer/{Id}");
-            var content = await response.Content.ReadAsStringAsync();
-            var customer = JsonConvert.DeserializeObject<CustomerDTO>(content);
-            return customer;
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<CustomerDTO>> GetCustomers()
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByDate(string fromdDateRange, string toDateRange)
         {
-            var response = await _client.GetAsync($"api/Customer/GetCustomers");
-            var content = await response.Content.ReadAsStringAsync();
-            var customers = JsonConvert.DeserializeObject<IEnumerable<CustomerDTO>>(content);
-            return customers;
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<CustomerDTO>> GetCustomersByDate(string fromdDateRange, string toDateRange)
+        public async Task<CompanyDTO> GetCompanyById(string Id)
         {
-            var response = await _client.GetAsync($"api/Customer/GetCustomersByDate/?fromdDateRange={fromdDateRange}&toDateRange={toDateRange}");
+            var response = await _client.GetAsync($"api/Company/GetCompany/{Id}");
+            var content = await response.Content.ReadAsStringAsync();
+            var Company = JsonConvert.DeserializeObject<CompanyDTO>(content);
+            return Company;
+        }
+
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByLocation(string location)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<CompanyDTO>> GetCompanyLocationByServiceType(string servicetype)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<CompanyDTO>> GetCompanys()
+        {
+            var response = await _client.GetAsync($"api/Company/GetCompanys");
+            var content = await response.Content.ReadAsStringAsync();
+            var Companys = JsonConvert.DeserializeObject<IEnumerable<CompanyDTO>>(content);
+            return Companys;
+        }
+
+        public async Task<IEnumerable<CompanyDTO>> GetCompanysByDate(string fromdDateRange, string toDateRange)
+        {
+            var response = await _client.GetAsync($"api/Company/GetCompanysByDate/?fromdDateRange={fromdDateRange}&toDateRange={toDateRange}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var customers = JsonConvert.DeserializeObject<IEnumerable<CustomerDTO>>(content);
-                return customers;
+                var Companys = JsonConvert.DeserializeObject<IEnumerable<CompanyDTO>>(content);
+                return Companys;
             }
             else
             {
@@ -90,11 +115,11 @@ namespace Logistics.AdminUI.Services
             }
         }
 
-        public async Task<SuccessModel> UpdateCustomer(CustomerDTO customerDTO)
+        public async Task<SuccessModel> UpdateCompany(CompanyDTO CompanyDTO)
         {
-            var content = JsonConvert.SerializeObject(customerDTO);
+            var content = JsonConvert.SerializeObject(CompanyDTO);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync("api/Customer/UpdateCustomer", bodyContent);
+            var response = await _client.PutAsync("api/Company/UpdateCompany", bodyContent);
 
             if (response.IsSuccessStatusCode)
             {

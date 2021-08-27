@@ -8,24 +8,24 @@ namespace Logistics.AdminUI.Services.Interfaces
 {
    public interface ICompanyService
     {
-        public Task<IEnumerable<BeautySalonDTO>> GetBeautySalons();
-        public Task<BeautySalonDTO> GetBeautySalonById(string Id);
+        public Task<IEnumerable<CompanyDTO>> GetCompanys();
+        public Task<CompanyDTO> GetCompanyById(string Id);
 
-        public Task<IEnumerable<BeautySalonDTO>> GetBeautySalonByName(string name);
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByName(string name);
 
-        public Task<IEnumerable<BeautySalonDTO>> GetBeautySalonByLocation(string location);
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByCategory(string name);
 
-        public Task<IEnumerable<BeautySalonDTO>> GetBeautySalonLocationByServiceType(string servicetype);
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByLocation(string location);
 
-        public Task<IEnumerable<BeautySalonDTO>> GetBeautySalonByDate(string fromdDateRange, string toDateRange);
+        public Task<IEnumerable<CompanyDTO>> GetCompanyLocationByServiceType(string servicetype);
 
-        public Task<SuccessModel> AddBeautySalon(BeautySalonDTO beautySalonDTO);
+        public Task<IEnumerable<CompanyDTO>> GetCompanyByDate(string fromdDateRange, string toDateRange);
 
-        public Task<SuccessModel> AddBeautySalonToServiceType(SalonServiceDTO salonservice);
+        public Task<SuccessModel> AddCompany(CompanyDTO CompanyDTO);
 
-        public Task<SuccessModel> RemoveBeautySalonFromServiceType(SalonServiceDTO salonservice);
+      
 
-        public Task<SuccessModel> UpdateBeautySalon(BeautySalonDTO beautySalonDTO);
+        public Task<SuccessModel> UpdateCompany(CompanyDTO CompanyDTO);
 
         public Task Delete(string Id);
     }

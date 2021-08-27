@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Logistics.AdminUI.Services.Interfaces
 {
-   public  interface IPriceListService
+   public  interface IShipperService
     {
-      //  public Task<IEnumerable<PriceListDTO>> GetPriceLists();
+      //  public Task<IEnumerable<ShipperDTO>> GetShippers();
 
-      //  public Task<IEnumerable<PriceListDTO>> GetPriceListsByServiceType();
-        public Task<PriceListDTO> GetPriceListByServiceType(string SerrviceTypeId,string salonId=null);
-        public Task<PriceListDTO> GetPriceListBySalonServiceType(string SerrviceTypeId);
+      //  public Task<IEnumerable<ShipperDTO>> GetShippersByServiceType();
+        public Task<ShipperDTO> GetShipperByServiceType(string SerrviceTypeId,string salonId=null);
+        public Task<ShipperDTO> GetShipperBySalonServiceType(string SerrviceTypeId);
     }
 }

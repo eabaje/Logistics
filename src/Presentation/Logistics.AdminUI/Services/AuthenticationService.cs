@@ -18,15 +18,15 @@ namespace Logistics.AdminUI.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly HttpClient _client;
-        private readonly ILocalStorageService _localStorage;
+        //private readonly ILocalStorageService _localStorage;
         private readonly AuthenticationStateProvider _authStateProvider;
 
-        public AuthenticationService(HttpClient client, ILocalStorageService localStorage, AuthenticationStateProvider authStateProvider)
+        public AuthenticationService(HttpClient client, /*ILocalStorageService localStorage,*/ AuthenticationStateProvider authStateProvider)
         {
             _client = client;
             _authStateProvider = authStateProvider;
-            ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
-            _localStorage = localStorage;
+            //((AuthStateProvider)_authStateProvider).NotifyUserLogout();
+            //_localStorage = localStorage;
         }
 
         public async Task<ResponseDTO> CheckUser(string email)

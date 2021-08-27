@@ -93,10 +93,11 @@ namespace Logistics.Shared
         public static class SD
         {
             public const string Role_Admin = "Admin";
-            public const string Role_Customer = "Customer";
-            public const string Role_Employee = "Employee";
-            public const string Role_Barber = "Barber";
-            public const string Role_Owner = "Owner";
+            public const string Role_Shipper = "Shipper";
+            public const string Role_Carrier = "Carrier";
+            public const string Role_Broker = "Broker";
+            public const string Role_Driver = "Driver";
+            public const string Role_Auditor = "Auditor";
 
             public const string Local_InitialBooking = "InitialRoomBookingInfo";
             public const string Local_RoomOrderDetails = "RoomOrderDetails";

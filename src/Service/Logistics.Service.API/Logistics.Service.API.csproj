@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\HomeController.cs" />
+    <Compile Remove="Controllers\JourneyController.cs" />
+    <Compile Remove="Controllers\PaymentController.cs" />
+    <Compile Remove="Controllers\RatingController.cs" />
+    <Compile Remove="Controllers\TrackController.cs" />
+    <Compile Remove="Controllers\WalletController.cs" />
+    <Compile Remove="Repository\Interfaces\IWalletRepository.cs" />
+    <Compile Remove="Repository\WalletRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Mailjet.Api" Version="1.2.3" />

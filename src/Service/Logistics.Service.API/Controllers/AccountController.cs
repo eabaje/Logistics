@@ -1,334 +1,228 @@
 ﻿using Logistics.Infrastructure.Managers.Abstract;
+using Logistics.Service.API.Entities;
+using Logistics.Service.API.Helper;
 using Logistics.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using static Logistics.Shared.Constants;
 
 namespace Logistics.Service.API.Controllers
 {
     public class AccountController : Controller
     {
 
-        private readonly IConfiguration _config;
-        private  IUserService _IUserStore;
-        private ICompanyService _ICompanyStore;
-        private IFireBaseAuthService _authservice ;
-        private readonly IEmailManager _emailClientSender;
-        //private FireBaseAuthService _authservice = new FireBaseAuthService();
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly APISettings _aPISettings;
+        private readonly IEmailManager _emailManager;
+        private readonly ILogger<AccountController> _logger;
 
-
-        public AccountController(IEmailManager emailClientSender,IConfiguration config,IUserService IUserStore,ICompanyService ICompanyStore, IFireBaseAuthService authservice)
+        public AccountController(SignInManager<AppUser> signInManager,
+            UserManager<AppUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+             ILogger<AccountController> logger,
+            IOptions<APISettings> options, IEmailManager emailManager)
         {
-            if (IUserStore == null)
-                throw new ArgumentNullException(nameof(IUserStore));
-            _IUserStore = IUserStore;
-            _ICompanyStore = ICompanyStore;
-            _authservice = authservice;
-            _config = config;
-            _emailClientSender = emailClientSender;
-
-        }
-       
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        public IActionResult Register(string ReturnUrl)
-        {
-            return View();
-        }
-        public IActionResult AddProfile(int CompanyId)
-        {
-            return View();
-        }
-       
-        //[HttpGet]
-        //[Route("Account/Profile/{cid}")]
-        //public async Task<IActionResult> Profile(string cid)
-        //{
-           
-        //    var entity = await _IUserStore.GetUserByCarrier(cid.ToString());
-
-        //    if (entity == null)
-        //    {
-        //        throw new NotFoundException(nameof(UsersDTO), cid);
-        //    }
-          
-        //    return View(entity);
-
-
-
-          
-        //}
-
-        [HttpGet]
-        [Route("Account/Profile/{uid}")]
-        public async Task<IActionResult> Profile(string  uid)
-        {
-
-            //  var entity = await _IUserStore.GetItemAsync(uid) ;
-          
-            var entity = await _IUserStore.GetUserByUID(uid);
-           
-
-
-            var model = new UsersDTO
-            {
-                LocalId = entity.LocalId,
-                LastName = entity.LastName ?? "No Last Name Provided",
-                FirstName = entity.FirstName ?? "No First Name Provided",
-               
-                Email = entity.Email ?? "No Email Provided",
-                Phone = entity.Phone ?? "No Phone Number Provided",
-                Company = await  _ICompanyStore.GetCompanyById(Guid.Parse(entity.Company)),
-                Category = entity.Category ?? "No Category found"
-               
-            };
-
-            List<SelectListItem> Category = new List<SelectListItem>()
-            {
-                 new SelectListItem() {Text="Broker", Value="broker"},
-                 new SelectListItem() { Text="Carrier", Value="carrier"},
-                 new SelectListItem() { Text="Dealer", Value="dealer"},
-                 new SelectListItem() { Text="Manufacturer", Value="shipper"},
-                 new SelectListItem() { Text="Import / Export", Value="shipper"}
-    };
-          
-
-                 ViewBag.CategoryList = Category;
-
-            ViewBag.FullName = model.FullName;
-            //if (entity == null)
-            //{
-            //    throw new NotFoundException(nameof(UsersDTO), uid);
-            //}
-
-            return View(model);
-
-
-
-
-        }
-        [HttpGet]
-        [Route("Account/EditProfile/{uid}")]
-        public async Task<IActionResult> EditProfile(string uid)
-        {
-
-            var entity = await _IUserStore.GetItemAsync(uid);
-
-            if (entity == null)
-            {
-                throw new NotFoundException(nameof(UsersDTO), uid);
-            }
-
-            return View(entity);
-
-
-
-
+            _roleManager = roleManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _aPISettings = options.Value;
+            _emailManager = emailManager;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpPost]
-        //[Route("EditProfile/{UserId}")]
-        public async Task<IActionResult> EditProfile(Users command)
-        {
-            var result = await _IUserStore.UpdateItemAsync(command.LocalId,command);
-
-          
-            if (result)
-            {
-               
-                     return View(new ResultMsg { Msg = " Your Profile has been updated successfully " });
-            }
-
-            else { return NotFound(); }
-
-
-
-
-        }
-
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-        [HttpGet]
         [AllowAnonymous]
-        public ActionResult Login(string ReturnUrl)
+        public async Task<IActionResult> SignUpCustomer([FromBody] UserRequestDTO userRequestDTO)
         {
-            if (TempData["IsPasswordChange"] != null)
+            if (userRequestDTO == null || !ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Password change successful. Please login with your new password.");
+                return BadRequest();
             }
-            var model = new LoginViewModel
-            {
-                ReturnUrl = ReturnUrl
 
+            var user = new AppUser
+            {
+                UserName = userRequestDTO.Email,
+                Email = userRequestDTO.Email,
+                FullName = userRequestDTO.FullName, //string.IsNullOrEmpty(userRequestDTO.FullName)?  userRequestDTO.FirstName + " " +userRequestDTO.LastName: userRequestDTO.FullName,
+                PhoneNumber = userRequestDTO.PhoneNo,
+                EmailConfirmed = true
             };
-            //  Session["ReturnUrl"] = ReturnUrl;
-            return View(model);
+            ///  userRequestDTO.Password = PasswordUtil.CreateRandomPassword(8);
+
+            var result = await _userManager.CreateAsync(user, userRequestDTO.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new RegisterationResponseDTO
+                { Errors = errors, IsRegisterationSuccessful = false });
+            }
+            var roleResult = await _userManager.AddToRoleAsync(user, SD.Role_Shipper);
+            if (!roleResult.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new RegisterationResponseDTO
+                { Errors = errors, IsRegisterationSuccessful = false });
+            }
+            // Send Email
+
+            //string body = string.Empty;
+            //string body1 = string.Empty;
+            //body = string.Format("Dear {0} <br/><br/> Project-{1} with  Ref:{2} was assigned to you. <br/><br/>Kindly click on the " +
+            //" link to view Project information : <a href =\"{3}\" title =\"Project Review\">{4}</a>" +
+            //"<br/><br/>Regards <br/><br/> {5}",
+            //AssignedName, project, hdPrj, callbackUrl, "Job Start Up Approval", ApprovedByName);
+
+
+            //  var sent=  await _emailManager.SendGeneralEmailAsync(userRequestDTO.Email, userRequestDTO.FullName, "Welcome to SmarttCutt", "");
+
+
+            return StatusCode(201);
         }
 
+      
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> SignIn([FromBody] AuthenticationDTO authenticationDTO)
+        {
+            var result = await _signInManager.PasswordSignInAsync(authenticationDTO.UserName,
+                authenticationDTO.Password, false, false);
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(authenticationDTO.UserName);
+                if (user == null)
+                {
+                    return Unauthorized(new AuthenticationResponseDTO
+                    {
+                        IsAuthSuccessful = false,
+                        ErrorMessage = "Invalid Authentication"
+                    });
+                }
+
+                //everything is valid and we need to login the user
+
+                var signinCredentials = GetSigningCredentials();
+                var claims = await GetClaims(user);
+
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: _aPISettings.ValidIssuer,
+                    audience: _aPISettings.ValidAudience,
+                    claims: claims,
+                    expires: DateTime.Now.AddDays(30),
+                    signingCredentials: signinCredentials);
+
+                var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+                return Ok(new AuthenticationResponseDTO
+                {
+                    IsAuthSuccessful = true,
+                    Token = token,
+                    userDTO = new UserDTO
+                    {
+                        Name = user.FullName,
+                        Id = user.Id,
+                        Email = user.Email,
+                        PhoneNo = user.PhoneNumber
+                    }
+                });
+            }
+            else
+            {
+                return Unauthorized(new AuthenticationResponseDTO
+                {
+                    IsAuthSuccessful = false,
+                    ErrorMessage = "Invalid Authentication"
+                });
+            }
+        }
 
 
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel command)
+        public async Task<ActionResult> CheckUser([FromBody] UserNameDTO userDTO)
         {
-            var result = await _authservice.LoginUser(command.UserName, command.Password);
-
-           
-         
-            if (result.Succeeded) 
+            try
             {
+                var isUser = await _userManager.FindByEmailAsync(userDTO.Email);
+                if (isUser == null)
+                {
+                    return Unauthorized(new ResponseDTO
+                    {
 
-                //get role and navigate to panel
+                        ResponseMessage = "User does not exist",
+                        IsSuccessful = false
+                    });
+                }
+
+                return Ok(new ResponseDTO
+                {
+                    ResponseMessage = "Valid User",
+                    IsSuccessful = true
+                });
+
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError($"Error: {exc}");
+                // transaction.Rollback();
+                return Unauthorized(
+                    new ResponseDTO
+                    {
+                        ResponseMessage = exc.Message,
+                        IsSuccessful = false
+                    });
 
 
-                //
-                return RedirectToAction("Profile", "Account", new { uid = result.link.User.LocalId });
-             
-
-
-                
-                //ModelState.AddModelError("UserName", "Invalid login attempt.");
-
-                //return BadRequest(ModelState);
 
 
 
             }
 
-            return Ok();
+
         }
 
 
 
 
-        private string GetRedirectUrl(string returnUrl)
+        private SigningCredentials GetSigningCredentials()
         {
-            if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
-            {
-                return Url.Action("Index", "Home");
-            }
-
-            return returnUrl;
+            var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_aPISettings.SecretKey));
+            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register(Users command)
+        private async Task<List<Claim>> GetClaims(AppUser user)
         {
-
-            var pwd = Application.Helper.CryptoServices.CreateRandomPassword(8);
-            var cmpGuid = System.Guid.NewGuid();
-            var entityCompany = new Company
+            var claims = new List<Claim>
             {
-                CompanyId = cmpGuid,
-                CompanyName = command.Company,
-                Email = command.Email,
-                Phone = command.Phone ?? null,
-                Category = command.Category,
-                CreatedOn = command.RegisterDate ?? DateTime.Now
-               
+                new Claim(ClaimTypes.Name,user.Email),
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim("Id",user.Id),
 
             };
-            bool addFlag = await _ICompanyStore.AddItemAsync(entityCompany);
-            if (addFlag)
+            var roles = await _userManager.GetRolesAsync(await _userManager.FindByEmailAsync(user.Email));
+
+            foreach (var role in roles)
             {
-
-
-            
-            var authlink   = await _authservice.CreateNewUser(command.Email, pwd);
-
-            var entityUsers = new Users
-            {
-                Company = cmpGuid.ToString(),
-                LastName = command.LastName,
-                FirstName = command.FirstName,
-                Email = command.Email,
-                Phone = command.Phone?? null,
-                Category = command.Category,
-                RegisterDate = command.RegisterDate?? DateTime.Now,
-                LocalId = authlink.link.User.LocalId
-
-            };
-
-           
-            var result=  await _IUserStore.AddItemAsync(entityUsers);
-
-
-         
-            if (result)
-            {
-                    ViewBag.EmailTitle = "LoadBoard User Services";
-
-                var plainTextContent = "Load Dispatch is your ideal partner with Load Board Services<b/>" +
-             string.Format("Your  login password: New Password: <b>{0}</b>", pwd);
-                var htmlContent = "<strong>"+ plainTextContent + "</strong>";
-
-                    AccountViewModel Acc = new AccountViewModel { UserName = command.Email, Password = pwd, Message = "", Name = entityUsers.FirstName + " " + entityUsers.LastName };
-
-                var msg = await _emailClientSender.SendTemplateEmail("",command.Email, entityUsers.FirstName +" "+ entityUsers.LastName, "Welcome to Load Dispatch",Acc,"");
-                return RedirectToAction("Profile", "Account", new { uid = authlink.link.User.LocalId});
-//, email= entityUsers.Email 
-
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
-           
-           
-
-
-            } 
-            return Ok();
+            return claims;
         }
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> Profile(AddProfile command)
-        //{
-        //    var result = await _mediator.Send(command);
-        //    if (result.IsSuccess)
-        //    {
-
-        //        return  View(new ResultMsg { Msg = "Profile Updated Successfully" });
-               
-                
-        //    }
-
-        //   return Ok();
-        //}
-
-
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult Profile(string ReturnUrl)
-        //{
-        //    if (TempData["IsPasswordChange"] != null)
-        //    {
-        //        ModelState.AddModelError("", "Password change successful. Please login with your new password.");
-        //    }
-        //    var model = new LoginViewModel
-        //    {
-        //        ReturnUrl = ReturnUrl
-
-        //    };
-        //    //  Session["ReturnUrl"] = ReturnUrl;
-        //    return View(model);
-        //}
 
     }
 

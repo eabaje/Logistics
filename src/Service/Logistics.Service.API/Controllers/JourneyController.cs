@@ -1,13 +1,7 @@
-﻿using Carrier.Application.CQRS.CompanyRW.Commands;
-using Carrier.Application.CQRS.LoginRW.Commands;
-using Carrier.Application.DTO;
-using Carrier.Application.Exceptions;
+﻿
 using Logistics.Service.API.Entities;
 using Logistics.Service.API.Repository.Interfaces;
-using Carrier.FirebaseServer.Repository;
 
-using Logistics.Service.API.Models;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
